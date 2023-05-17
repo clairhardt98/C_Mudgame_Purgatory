@@ -4,21 +4,25 @@
 #include "Intro.h"
 #include "Player.h"
 
+
+
 int main()
 {
-	int temp;
-	
+	//게임 시작준비
+	int Selection;
 	ClearUI();
 	Intro();
 
+	//플레이어 생성
 	Player* player = InitPlayer();
-	
+	DrawPlayer();
+
 	while (1)
 	{
 		PrintScreen();
 		printf("무엇을 할까? ");
 		printf(">> ");
-		temp = _getch();
+		Selection = _getch();
 		
 		system("cls");
 	}

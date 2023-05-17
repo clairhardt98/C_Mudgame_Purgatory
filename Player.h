@@ -26,8 +26,8 @@ typedef struct
 }Player;
 
 Player* InitPlayer();
-
 void DestroyPlayer(Player*);
+
 void Player_MeleeAttack(Player*, Enemy*);
 void Player_RangeAttack(Player*, Enemy**);
 void Player_Defense(Player*);
