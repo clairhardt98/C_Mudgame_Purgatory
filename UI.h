@@ -8,9 +8,12 @@
 #define UICOL 128
 
 char ScreenArray[UIROW][UICOL];
-void PrintScreen();
+
 void ClearUI();
+void PrintScreen();
 void PrintSentence(char*, int, int, int);
+void PrintRoundUI();
+void PrintMenuUI();
 
 void PrintScreen()
 {
@@ -52,4 +55,35 @@ void PrintSentence(char* Sentence, int Length, int Startpos_i, int Startpos_j)
 {
 	for (int j = 0; j < Length; j++)
 		ScreenArray[Startpos_i][Startpos_j + j - Length/2] = Sentence[j];
+}
+
+void PrintRoundUI()
+{
+	int HorizontalStartPos = 16;
+	int VerticalStartPos = 4;
+	for (int i = 1; i < HorizontalStartPos; i++)
+		ScreenArray[VerticalStartPos][i] = '-';
+	for (int i = 1; i < VerticalStartPos; i++)
+		ScreenArray[i][HorizontalStartPos] = '|';
+
+	ScreenArray[VerticalStartPos][0] = '+';
+	ScreenArray[0][HorizontalStartPos] = '+';
+	ScreenArray[VerticalStartPos][HorizontalStartPos] = '+';
+
+	ScreenArray[VerticalStartPos / 2][HorizontalStartPos / 2] = '/';
+}
+
+void PrintMenuUI()
+{
+	int HorizontalStartPos = 50;
+	int VerticalStartPos = 26;
+
+	for (int i = HorizontalStartPos; i < UICOL - 1; i++)
+		ScreenArray[VerticalStartPos][i] = '-';
+	for (int i = VerticalStartPos; i < UIROW - 1; i++)
+		ScreenArray[i][HorizontalStartPos] = '|';
+
+	ScreenArray[VerticalStartPos][UICOL - 1] = '+';
+	ScreenArray[UIROW - 1][HorizontalStartPos] = '+';
+	ScreenArray[VerticalStartPos][HorizontalStartPos] = '+';
 }

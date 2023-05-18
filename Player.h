@@ -3,6 +3,12 @@
 #include "Enemy.h"
 #include <stdlib.h>
 
+#define PlayerSpriteRow 17
+#define PlayerSpriteCol 38
+
+
+char PlayerSprite[PlayerSpriteRow][PlayerSpriteCol];
+
 typedef struct
 {
 	unsigned int MaxHP;
@@ -34,11 +40,14 @@ void Player_Defense(Player*);
 void Player_Hit(Player*, int);
 void Player_Die(Player*);
 
+void CreatePlayerSpriteArr();
 void DrawPlayer();
 
 
 Player* InitPlayer()
 {
+	CreatePlayerSpriteArr();
+	DrawPlayer();
 	Player* player = (Player*)malloc(sizeof(Player));
 	player->Attack = 5;
 	player->Defense = 5;
@@ -76,7 +85,7 @@ void Player_MeleeAttack(Player* player, Enemy* enemy)
 	{
 		//에너지 없을때 단일공격명령 내렸을 때 로직
 	}
-	
+
 	//공격 애니메이션 출력 로직
 }
 
@@ -84,7 +93,7 @@ void Player_RangeAttack(Player* player, Enemy** enemy)
 {
 	if (player->Energy >= player->MeleeAttackEnergyNeeded)
 	{
-		int Dmg = (int) ((float)player->Attack * player->AttackDmgMultiplier);
+		int Dmg = (int)((float)player->Attack * player->AttackDmgMultiplier);
 		if (Dmg > 0)
 		{
 			for (int i = 0; i < MAXENEMY; i++)
@@ -126,3 +135,35 @@ void Player_Die(Player* player)
 	//사망 시 로직
 }
 
+void CreatePlayerSpriteArr()
+{
+	strcpy(PlayerSprite[0], "       _____________            .     ");
+	strcpy(PlayerSprite[1], "      /             \\          /|\\    ");
+	strcpy(PlayerSprite[2], "     /               \\        / | \\   ");
+	strcpy(PlayerSprite[3], "    /                 \\      /  |  \\  ");
+	strcpy(PlayerSprite[4], "   |                   |     |  |  |  ");
+	strcpy(PlayerSprite[5], "   |                   |     |  |  |  ");
+	strcpy(PlayerSprite[6], "   \\                  /      |  |  |  ");
+	strcpy(PlayerSprite[7], "    \\                /       |  |  |  ");
+	strcpy(PlayerSprite[8], "     \\              /        |  |  |  ");
+	strcpy(PlayerSprite[9], "       ------------          |  |  |  ");
+	strcpy(PlayerSprite[10], "_________________________    |  |  |  ");
+	strcpy(PlayerSprite[11], "                         |   |  |  |  ");
+	strcpy(PlayerSprite[12], "                         | -----------");
+	strcpy(PlayerSprite[13], "                         | |         |");
+	strcpy(PlayerSprite[14], "                         | |         |");
+	strcpy(PlayerSprite[15], "                         | -----------");
+	strcpy(PlayerSprite[16], "                         |    |   |   ");
+}
+
+
+void DrawPlayer()
+{
+	//CreatePlayerSpriteArr();
+	int PlayerSpriteStartPosI = 22;
+	int PlayerSpriteStartPosJ = 1;
+
+	for (int i = 0; i < PlayerSpriteRow; i++)
+		for (int j = 0; j < PlayerSpriteCol; j++)
+			ScreenArray[PlayerSpriteStartPosI + i][PlayerSpriteStartPosJ + j] = PlayerSprite[i][j];
+}

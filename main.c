@@ -15,7 +15,9 @@ int main()
 
 	//플레이어 생성
 	Player* player = InitPlayer();
-	DrawPlayer();
+	PrintRoundUI();
+	PrintMenuUI();
+	//DrawPlayer();
 
 	while (1)
 	{
