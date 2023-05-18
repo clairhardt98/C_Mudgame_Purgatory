@@ -30,6 +30,7 @@ void PrintScreen()
 	}
 
 }
+
 void ClearUI()
 {
 	//printf("%p", &ScreenArray[10][10]);

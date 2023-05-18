@@ -3,11 +3,10 @@
 #include "Enemy.h"
 #include <stdlib.h>
 
-#define PlayerSpriteRow 17
-#define PlayerSpriteCol 38
+#define PLAYER_SPRITE_HEIGHT 17
+#define PLAYER_SPRITE_WIDTH 38
 
-
-char PlayerSprite[PlayerSpriteRow][PlayerSpriteCol];
+char PlayerSprite[PLAYER_SPRITE_HEIGHT][PLAYER_SPRITE_WIDTH];
 
 typedef struct
 {
@@ -34,8 +33,8 @@ typedef struct
 Player* InitPlayer();
 void DestroyPlayer(Player*);
 
-void Player_MeleeAttack(Player*, Enemy*);
-void Player_RangeAttack(Player*, Enemy**);
+//void Player_MeleeAttack(Player*, Enemy*);
+//void Player_RangeAttack(Player*, Enemy**);
 void Player_Defense(Player*);
 void Player_Hit(Player*, int);
 void Player_Die(Player*);
@@ -72,43 +71,43 @@ void DestroyPlayer(Player* player)
 	free(player);
 }
 
-void Player_MeleeAttack(Player* player, Enemy* enemy)
-{
-	if (player->Energy >= player->MeleeAttackEnergyNeeded)
-	{
-		int Dmg = (int)((float)player->Attack * player->AttackDmgMultiplier);
-		if (Dmg > 0)
-			Enemy_Hit(enemy, Dmg);
-		player->Energy -= player->MeleeAttackEnergyNeeded;
-	}
-	else
-	{
-		//에너지 없을때 단일공격명령 내렸을 때 로직
-	}
-
-	//공격 애니메이션 출력 로직
-}
-
-void Player_RangeAttack(Player* player, Enemy** enemy)
-{
-	if (player->Energy >= player->MeleeAttackEnergyNeeded)
-	{
-		int Dmg = (int)((float)player->Attack * player->AttackDmgMultiplier);
-		if (Dmg > 0)
-		{
-			for (int i = 0; i < MAXENEMY; i++)
-			{
-				Enemy_Hit(enemy[i], Dmg);
-			}
-		}
-		player->Energy -= player->RangeAttackEnergyNeeded;
-	}
-	else
-	{
-		//에너지 없을 때 광역공격명령 내렸을 때 로직
-	}
-	//광역공격 애니메이션 출력 로직
-}
+//void Player_MeleeAttack(Player* player, Enemy* enemy)
+//{
+//	if (player->Energy >= player->MeleeAttackEnergyNeeded)
+//	{
+//		int Dmg = (int)((float)player->Attack * player->AttackDmgMultiplier);
+//		if (Dmg > 0)
+//			Enemy_Hit(enemy, Dmg);
+//		player->Energy -= player->MeleeAttackEnergyNeeded;
+//	}
+//	else
+//	{
+//		//에너지 없을때 단일공격명령 내렸을 때 로직
+//	}
+//
+//	//공격 애니메이션 출력 로직
+//}
+//
+//void Player_RangeAttack(Player* player, Enemy** enemy)
+//{
+//	if (player->Energy >= player->MeleeAttackEnergyNeeded)
+//	{
+//		int Dmg = (int)((float)player->Attack * player->AttackDmgMultiplier);
+//		if (Dmg > 0)
+//		{
+//			for (int i = 0; i < MAXENEMY; i++)
+//			{
+//				Enemy_Hit(enemy[i], Dmg);
+//			}
+//		}
+//		player->Energy -= player->RangeAttackEnergyNeeded;
+//	}
+//	else
+//	{
+//		//에너지 없을 때 광역공격명령 내렸을 때 로직
+//	}
+//	//광역공격 애니메이션 출력 로직
+//}
 
 void Player_Defense(Player* player)
 {
@@ -156,14 +155,13 @@ void CreatePlayerSpriteArr()
 	strcpy(PlayerSprite[16], "                         |    |   |   ");
 }
 
-
 void DrawPlayer()
 {
 	//CreatePlayerSpriteArr();
 	int PlayerSpriteStartPosI = 22;
 	int PlayerSpriteStartPosJ = 1;
 
-	for (int i = 0; i < PlayerSpriteRow; i++)
-		for (int j = 0; j < PlayerSpriteCol; j++)
+	for (int i = 0; i < PLAYER_SPRITE_HEIGHT; i++)
+		for (int j = 0; j < PLAYER_SPRITE_WIDTH; j++)
 			ScreenArray[PlayerSpriteStartPosI + i][PlayerSpriteStartPosJ + j] = PlayerSprite[i][j];
 }

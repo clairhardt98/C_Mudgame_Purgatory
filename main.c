@@ -1,14 +1,11 @@
-#define _CRT_SECURE_NO_WARNINGS
-
 #include "UI.h"
 #include "Intro.h"
-#include "Player.h"
+#include "Battle.h"
 
 
 
 int main()
 {
-	//게임 시작준비
 	int Selection;
 	ClearUI();
 	Intro();
@@ -17,16 +14,25 @@ int main()
 	Player* player = InitPlayer();
 	PrintRoundUI();
 	PrintMenuUI();
-	//DrawPlayer();
-
+	//CreateEnemySpriteArr();
+	
 	while (1)
 	{
+		PrintRoundUI();
+		PrintMenuUI();
+		DrawPlayer();
 		PrintScreen();
 		printf("무엇을 할까? ");
 		printf(">> ");
-		Selection = _getch();
+		scanf("%d", &Selection);
 		
+		Enemy** enemyArr = SpawnEnemy(Selection);
+		PrintScreen();
+		printf("무엇을 할까? ");
+		printf(">> ");
+		scanf("%d", &Selection);
+		DestroyEnemyArr(enemyArr);
 		system("cls");
 	}
-
+	
 }
