@@ -6,6 +6,12 @@
 #define PLAYER_SPRITE_HEIGHT 17
 #define PLAYER_SPRITE_WIDTH 38
 
+#define PLAYER_HP_POS_I 20
+#define PLAYER_HP_POS_J 15
+
+#define PLAYER_ENERGY_POS_I PLAYER_HP_POS_I
+#define PLAYER_ENERGY_POS_J 33
+
 char PlayerSprite[PLAYER_SPRITE_HEIGHT][PLAYER_SPRITE_WIDTH];
 
 typedef struct
@@ -23,6 +29,7 @@ typedef struct
 
 	unsigned int MeleeAttackEnergyNeeded;
 	unsigned int RangeAttackEnergyNeeded;
+	unsigned int DefenseEnergyNeeded;
 
 	float AttackDmgMultiplier;
 	float ArmourMultiplier;
@@ -42,6 +49,9 @@ void Player_Die(Player*);
 void CreatePlayerSpriteArr();
 void DrawPlayer();
 
+void DrawPlayerHP(Player*);
+void DrawPlayerEnergy(Player*);
+
 
 Player* InitPlayer()
 {
@@ -53,6 +63,10 @@ Player* InitPlayer()
 
 	player->MaxEnergy = 3;
 	player->Energy = player->MaxEnergy;
+
+	player->MeleeAttackEnergyNeeded = 1;
+	player->RangeAttackEnergyNeeded = 2;
+	player->DefenseEnergyNeeded = 1;
 
 	player->Armour = 0;
 
@@ -111,7 +125,13 @@ void DestroyPlayer(Player* player)
 
 void Player_Defense(Player* player)
 {
-	player->Armour += (int)(player->Defense * player->ArmourMultiplier);
+	if (player->Energy >= player->DefenseEnergyNeeded)
+	{
+		int tempArmour = (int)(player->Defense * player->ArmourMultiplier);
+		player->Armour += tempArmour;
+		player->Energy -= player->DefenseEnergyNeeded;
+		sprintf(Statement, "이번 턴 방어도가 %d 증가합니다.", tempArmour);
+	}
 }
 
 void Player_Hit(Player* player, int Dmg)
@@ -164,4 +184,21 @@ void DrawPlayer()
 	for (int i = 0; i < PLAYER_SPRITE_HEIGHT; i++)
 		for (int j = 0; j < PLAYER_SPRITE_WIDTH; j++)
 			ScreenArray[PlayerSpriteStartPosI + i][PlayerSpriteStartPosJ + j] = PlayerSprite[i][j];
+}
+
+void DrawPlayerHP(Player* player)
+{
+	char PlayerHPStr[20];
+	if(player->Armour > 0)
+		sprintf(PlayerHPStr, "%d+(%d) / %d", player->CurrHP, player->Armour, player->MaxHP);
+	else
+		sprintf(PlayerHPStr, "%d / %d", player->CurrHP, player->MaxHP);
+	DrawSentenceCenterAlign(PlayerHPStr, strlen(PlayerHPStr), PLAYER_HP_POS_I, PLAYER_HP_POS_J);
+}
+
+void DrawPlayerEnergy(Player* player)
+{
+	char PlayerEnergyStr[7];
+	sprintf(PlayerEnergyStr, "%d / %d", player->Energy, player->MaxEnergy);
+	DrawSentenceCenterAlign(PlayerEnergyStr, strlen(PlayerEnergyStr), PLAYER_ENERGY_POS_I, PLAYER_ENERGY_POS_J);
 }
