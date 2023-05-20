@@ -10,8 +10,14 @@
 #define RANGE_ATTACK_EFFECT_POS_I 10
 #define RANGE_ATTACK_EFFECT_POS_J 88
 
+
+
 void PlayerMeleeAttack(Player*, Enemy*);
 bool PlayerRangeAttack(Player*, Enemy**, int);
+
+EnemyPattern SetEnemyAction(Enemy*, int);
+void DrawEnemyAction(Enemy*);
+void EnemyAction(Player*, Enemy*);
 
 void EnemyAttack(Enemy*, Player*);
 
@@ -36,6 +42,7 @@ void PlayerMeleeAttack(Player* player, Enemy* enemy)
 
 void EnemyAttack(Enemy* enemy, Player* player)
 {
+
 	int Dmg = (int)((float)enemy->Attack * enemy->AttackDmgMultiplier);
 	if (Dmg > 0)
 		Player_Hit(player, Dmg);
@@ -68,7 +75,7 @@ bool PlayerRangeAttack(Player* player, Enemy** enemyArr, int enemyCnt)
 void DrawRangeAttackEffect()
 {
 	char RangeAttackEffect[70] = "<===============================================================>";
-	
+
 	DrawSentenceCenterAlign(RangeAttackEffect, strlen(RangeAttackEffect),
 		RANGE_ATTACK_EFFECT_POS_I, RANGE_ATTACK_EFFECT_POS_J - 2);
 
@@ -96,4 +103,97 @@ void DrawMeleeAttackEffect(int enemyNo)
 		}
 	PrintScreen();
 	Sleep(1000);
+}
+
+EnemyPattern SetEnemyAction(Enemy* enemy, int seed)
+{
+	int temp = seed % 10;
+	EnemyPattern EPattern;
+	if (temp == 0)
+	{
+		EPattern = ENEMYATTACKWITHWEAKEN;
+	}
+	else if (temp > 0 && temp <= 2)
+	{
+		EPattern = ENEMYWEAKEN;
+	}
+	else if (temp > 2 && temp <= 4)
+	{
+		EPattern = ENEMYDEFENSE;
+	}
+	else
+	{
+		EPattern = ENEMYATTACK;
+	}
+	return EPattern;
+}
+
+void DrawEnemyAction(Enemy* enemy)
+{
+	switch (enemy->NextPattern)
+	{
+	case ENEMYATTACK:
+	{
+		sprintf(enemy->NextPatternStr, "!%d", enemy->Attack);
+		break;
+	}
+
+	case ENEMYDEFENSE:
+	{
+		sprintf(enemy->NextPatternStr, "@%d", enemy->Defense);
+		//적 방어 함수
+		break;
+	}
+
+	case ENEMYWEAKEN:
+	{
+		sprintf(enemy->NextPatternStr, "#%d", enemy->WeakenDuration);
+		//약화 함수
+		break;
+	}
+
+	case ENEMYATTACKWITHWEAKEN:
+	{
+		sprintf(enemy->NextPatternStr, "!%d #%d", enemy->Attack / 2, enemy->WeakenDuration / 2);
+		break;
+	}
+
+	}
+}
+
+void EnemyAction(Player* player, Enemy* enemy)
+{
+	switch (enemy->NextPattern)
+	{
+	case ENEMYATTACK:
+	{
+		sprintf(Statement, "상대 %d. %s의 공격!", enemy->EnemyNo + 1, enemy->Name);
+		EnemyAttack(enemy, player);
+		break;
+	}
+
+	case ENEMYDEFENSE:
+	{
+		sprintf(Statement, "상대 %d. %s의 방어!", enemy->EnemyNo + 1, enemy->Name);
+		Enemy_Defense(enemy);
+		break;
+	}
+
+	case ENEMYWEAKEN:
+	{
+		sprintf(Statement, "상대 %d. %s의 약화!", enemy->EnemyNo + 1, enemy->Name);
+		//약화 함수
+		break;
+	}
+
+	case ENEMYATTACKWITHWEAKEN:
+	{
+		sprintf(Statement, "상대 %d. %s의 파쇄!", enemy->EnemyNo + 1, enemy->Name);
+		//적이 공격하고 약화시키는 함수
+		break;
+	}
+
+	}
+	//확률 -> 공격 50, 수비 20, 약화 20, 공격 및 약화 10
+	//0~9를 rand로 뽑는다 ->0 : 공격 및 약화, 1~2 : 약화, 3~4 : 수비 5~9 : 공격
 }

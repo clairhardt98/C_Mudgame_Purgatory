@@ -136,16 +136,16 @@ void Player_Defense(Player* player)
 
 void Player_Hit(Player* player, int Dmg)
 {
-	int eDmg = player->Armour - (int)((float)Dmg * player->HitDmgMultiplier);
-
+	//int eDmg = (int)((float)player->Armour - (float)Dmg * player->HitDmgMultiplier);
+	int eDmg = player->Armour - Dmg;
 	if (eDmg < 0)
 	{
-		player->CurrHP -= eDmg;
+		player->CurrHP += eDmg;
 		player->Armour = 0;
 	}
 	else
 	{
-		player->Armour -= eDmg;
+		player->Armour -= Dmg;
 	}
 }
 

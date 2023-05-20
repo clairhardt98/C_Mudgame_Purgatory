@@ -22,7 +22,18 @@
 #define ENEMY_DAMAGE_POS_I 3
 #define ENEMY_DAMAGE_POS_J 62
 
+#define ENEMY_PATTERN_STR_POS_I 3
+#define ENEMY_PATTERN_STR_POS_J 62
+
 char EnemySprite[ENEMY_SPRITE_HEIGHT][ENEMY_SPRITE_WIDTH];
+
+typedef enum 
+{
+	ENEMYATTACK = 1,
+	ENEMYDEFENSE,
+	ENEMYWEAKEN,
+	ENEMYATTACKWITHWEAKEN
+}EnemyPattern;
 
 typedef struct
 {
@@ -36,6 +47,8 @@ typedef struct
 
 	unsigned int Armour;
 
+	unsigned int WeakenDuration;
+
 	int EnemyNo;
 
 	bool isAlive;
@@ -43,6 +56,9 @@ typedef struct
 	float AttackDmgMultiplier;
 	float ArmourMultiplier;
 	float HitDmgMultiplier;
+
+	EnemyPattern NextPattern;
+	char NextPatternStr[10];
 }Enemy;
 
 //상대 생성 및 소멸
@@ -63,6 +79,8 @@ void DisplayEnemyHealth(Enemy*);
 
 void DrawEnemyDamage(int, int);
 
+void DrawEnemyPatternStr(Enemy*);
+
 //void Enemy_Attack(Enemy*, Player*);
 void Enemy_Defense(Enemy*);
 void Enemy_Hit(Enemy*, int);
@@ -82,6 +100,7 @@ Enemy* InitEnemy(int seed)
 	enemy->CurrHP = enemy->MaxHP;
 	enemy->Attack = 6;
 	enemy->Defense = 3;
+	enemy->WeakenDuration = 2;
 
 	enemy->Armour = 0;
 
@@ -89,6 +108,8 @@ Enemy* InitEnemy(int seed)
 	enemy->ArmourMultiplier = 1.0f;
 	enemy->HitDmgMultiplier = 1.0f;
 
+	enemy->NextPattern = ENEMYATTACK;
+	strcpy(enemy->NextPatternStr, "");
 	SetRandomEnemyName(enemy, seed);
 	return enemy;
 
@@ -121,11 +142,14 @@ void DrawEnemyArr(Enemy** enemyArr, int length)
 {
 	for (int i = 0; i < length; i++)
 	{
-		CreateEnemySpriteArr();
-		DrawEnemy(enemyArr[i]->EnemyNo);
+		if (enemyArr[i]->isAlive)
+		{
+			CreateEnemySpriteArr();
+			DrawEnemy(enemyArr[i]->EnemyNo);
 
-		DisplayEnemyName(enemyArr[i]);
-		DisplayEnemyHealth(enemyArr[i]);
+			DisplayEnemyName(enemyArr[i]);
+			DisplayEnemyHealth(enemyArr[i]);
+		}
 	}
 }
 
@@ -148,25 +172,34 @@ void DestroyEnemyArr(Enemy** enemyArr)
 
 void Enemy_Defense(Enemy* enemy)
 {
+	
 	enemy->Armour += (int)((float)enemy->Defense * enemy->ArmourMultiplier);
 }
 
 void Enemy_Hit(Enemy* enemy, int Dmg)
 {
-
-	if (Dmg < enemy->CurrHP)
+	if (enemy->Armour > Dmg)
 	{
-		enemy->CurrHP -= Dmg;
-		sprintf(Statement, "%s가 %d만큼의 피해를 입었습니다.", enemy->Name, Dmg);
-		DrawEnemyDamage(Dmg, enemy->EnemyNo);
+		enemy->Armour -= Dmg;
 	}
 	else
 	{
-		sprintf(Statement, "%s가 죽었습니다.", enemy->Name);
-		DrawEnemyDamage(Dmg, enemy->EnemyNo);
-		enemy->CurrHP = 0;
-		enemy->isAlive = 0;
+		int eDmg = Dmg - enemy->Armour;
+		if (eDmg < enemy->CurrHP)
+		{
+			enemy->CurrHP -= eDmg;
+			//sprintf(Statement, "%s가 %d만큼의 피해를 입었습니다.", enemy->Name, Dmg);
+			DrawEnemyDamage(Dmg, enemy->EnemyNo);
+		}
+		else
+		{
+			//sprintf(Statement, "%s가 죽었습니다.", enemy->Name);
+			DrawEnemyDamage(Dmg, enemy->EnemyNo);
+			enemy->CurrHP = 0;
+			enemy->isAlive = 0;
+		}
 	}
+	
 	//피 0되면 죽는 로직
 //printf("출력문 전달 완료\n");
 
@@ -204,7 +237,10 @@ void DisplayEnemyName(Enemy* enemy)
 	else if (idx == 1)
 		idx = 0;
 
-	DrawSentenceCenterAlign(enemy->Name, strlen(enemy->Name), ENEMY_NAME_POS_I, ENEMY_NAME_POS_J + idx * (ENEMY_INTERVAL + ENEMY_SPRITE_WIDTH));
+	char tempNoName[30];
+	sprintf(tempNoName, "%d. %s", enemy->EnemyNo + 1, enemy->Name);
+
+	DrawSentenceCenterAlign(tempNoName, strlen(tempNoName), ENEMY_NAME_POS_I, ENEMY_NAME_POS_J + idx * (ENEMY_INTERVAL + ENEMY_SPRITE_WIDTH));
 }
 
 void SetRandomEnemyName(Enemy* enemy, int seed)
@@ -245,14 +281,19 @@ void DisplayEnemyHealth(Enemy* enemy)
 		idx = 0;
 
 	char HealthLetter[20] = "";
-	char CurrHPLetter[4] = "";
+	/*char CurrHPLetter[4] = "";
 	sprintf(CurrHPLetter, "%d", enemy->CurrHP);
 	char MaxHPLetter[4] = "";
 	sprintf(MaxHPLetter, "%d", enemy->MaxHP);
 
 	strcat(HealthLetter, CurrHPLetter);
 	strcat(HealthLetter, " / ");
-	strcat(HealthLetter, MaxHPLetter);
+	strcat(HealthLetter, MaxHPLetter);*/
+	if (enemy->Armour > 0)
+	{
+		sprintf(HealthLetter, "%d+(%d) / %d", enemy->CurrHP, enemy->Armour, enemy->MaxHP);
+	}
+	else sprintf(HealthLetter, "%d / %d", enemy->CurrHP, enemy->MaxHP);
 
 	DrawSentenceCenterAlign(HealthLetter, strlen(HealthLetter), ENEMY_HEALTH_POS_I, ENEMY_HEALTH_POS_J + idx * (ENEMY_INTERVAL + ENEMY_SPRITE_WIDTH));
 }
@@ -282,4 +323,18 @@ void DrawEnemyDamage(int Dmg, int enemyNo)
 	char DmgStr[10];
 	sprintf(DmgStr, "-%d", Dmg);
 	DrawSentenceCenterAlign(DmgStr, strlen(DmgStr), ENEMY_DAMAGE_POS_I, EnemyDamagePosJ);
+}
+
+void DrawEnemyPatternStr(Enemy* enemy)
+{
+	int EnemyStrPosJ;
+
+	if (enemy->EnemyNo == 0)
+		EnemyStrPosJ = 6 + ENEMY_SPRITE_STARTPOS_J + ENEMY_INTERVAL + ENEMY_SPRITE_WIDTH;
+	else if (enemy->EnemyNo == 1)
+		EnemyStrPosJ = 6 + ENEMY_SPRITE_STARTPOS_J;
+	else
+		EnemyStrPosJ = 6 + ENEMY_SPRITE_STARTPOS_J + 2 * (ENEMY_INTERVAL + ENEMY_SPRITE_WIDTH);
+
+	DrawSentenceCenterAlign(enemy->NextPatternStr, strlen(enemy->NextPatternStr), ENEMY_PATTERN_STR_POS_I, EnemyStrPosJ);
 }

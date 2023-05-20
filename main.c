@@ -8,7 +8,20 @@ void RenewScreen(Player*, Enemy**, int);
 bool PlayerAction(int, Player*, Enemy**, int);
 void TurnEnd(Player*, Enemy**, int);
 void PrintEffect(int, int);
+void PrepareEnemyArr(Enemy**, int);
+void OnPlayerTurnEnd(Player*, Enemy**, int);
 
+enum PlayerActionEnum
+{
+	MELEE = 1,
+	RANGE,
+	DEFENSE,
+	SKILL,
+	PLAYERINFO,
+	ENEMYINFO,
+	GAMEINFO,
+	QUIT
+};
 int main()
 {
 	int Selection;
@@ -31,6 +44,8 @@ int main()
 		//enter battle
 		while (1)
 		{
+			PrepareEnemyArr(enemyArr, enemyCnt);
+			RenewScreen(player, enemyArr, enemyCnt);
 			//플레이어의 턴
 			while (player->Energy > 0 && !StageClearFlag)
 			{
@@ -57,6 +72,7 @@ int main()
 				}
 			}
 			if (StageClearFlag) break;
+			OnPlayerTurnEnd(player, enemyArr, enemyCnt);
 			Sleep(2000);
 			sprintf(Statement, "상대의 턴!");
 			RenewScreen(player, enemyArr, enemyCnt);
@@ -67,7 +83,8 @@ int main()
 				if (enemyArr[i]->isAlive)
 				{
 					//enemy task
-					sprintf(Statement, "상대 %s의 행동", enemyArr[i]->Name);
+					//sprintf(Statement, "상대 %s의 행동", enemyArr[i]->Name);
+					EnemyAction(player, enemyArr[i]);
 					RenewScreen(player, enemyArr, enemyCnt);
 					Sleep(2000);
 				}
@@ -92,15 +109,22 @@ void RenewScreen(Player* player, Enemy** enemyArr, int enemyCnt)
 	DrawPlayerHP(player);
 	DrawPlayerEnergy(player);
 	DrawEnemyArr(enemyArr, enemyCnt);
+	for (int i = 0; i < enemyCnt; i++)
+	{
+		if (enemyArr[i]->isAlive)
+			DrawEnemyPatternStr(enemyArr[i]);
+	}
 	DrawStatement();
 	PrintScreen();
 }
 
 void PrintEffect(int sel, int target)
 {
-	switch (sel)
+	enum PlayerActionEnum  playeractionenum = sel;
+
+	switch (playeractionenum)
 	{
-	case 1:
+	case MELEE:
 	{
 		char tempEffectStatement[10] = "타격";
 		ClearStatement();
@@ -109,7 +133,7 @@ void PrintEffect(int sel, int target)
 		DrawMeleeAttackEffect(target);
 		break;
 	}
-	case 2:
+	case RANGE:
 	{
 		char tempEffectStatement[10] = "절단!";
 		ClearStatement();
@@ -123,11 +147,13 @@ void PrintEffect(int sel, int target)
 }
 bool PlayerAction(int sel, Player* player, Enemy** enemyArr, int enemyCnt)
 {
-	if (sel < 1 || sel>8) return 0;//잘못된 입력이라면 false 리턴
+	if (sel < 1 || sel > 8) return 0;//잘못된 입력이라면 false 리턴
 
-	switch (sel)
+	enum PlayerActionEnum  playeractionenum = sel;
+
+	switch (playeractionenum)
 	{
-	case 1:
+	case MELEE:
 		//melee attack logic
 		printf("대상 : ");
 		for (int i = 0; i < enemyCnt; i++)
@@ -154,30 +180,35 @@ bool PlayerAction(int sel, Player* player, Enemy** enemyArr, int enemyCnt)
 			scanf("%d", &targetEnemy);
 		}
 
+
 		PlayerMeleeAttack(player, enemyArr[targetEnemy - 1]);
 		PrintEffect(sel, targetEnemy - 1);
 
 		RenewScreen(player, enemyArr, enemyCnt);
 		break;
-	case 2:
+	case RANGE:
 		if (PlayerRangeAttack(player, enemyArr, enemyCnt))
 			PrintEffect(sel, 1);
 		RenewScreen(player, enemyArr, enemyCnt);
 		break;
-	case 3:
+	case DEFENSE:
 		Player_Defense(player);
 		RenewScreen(player, enemyArr, enemyCnt);
 		break;
-	case 4:
+	case SKILL:
 		//스킬
 		break;
-	case 5:
+	case PLAYERINFO:
+		//내 정보
 		break;
-	case 6:
+	case ENEMYINFO:
+		//적 정보
 		break;
-	case 7:
+	case GAMEINFO:
+		//게임 정보
 		break;
-	case 8:
+	case QUIT:
+		//종료
 		break;
 	}
 	if (IsAllEnemyDead(enemyArr, enemyCnt)) StageClearFlag = true;
@@ -190,3 +221,27 @@ void TurnEnd(Player* player, Enemy** enemyArr, int enemyCnt)
 	player->Armour = 0;
 }
 
+void PrepareEnemyArr(Enemy** enemyArr, int enemyCnt)
+{
+	int seed;
+	srand(time(NULL));
+	for (int i = 0; i < enemyCnt && enemyArr[i]->isAlive; i++)
+	{
+		//아직해결안됨
+		seed = rand();
+		enemyArr[i]->NextPattern = SetEnemyAction(enemyArr[i], seed);
+		DrawEnemyAction(enemyArr[i]);
+		DrawEnemyPatternStr(enemyArr[i]);
+	}
+}
+
+void OnPlayerTurnEnd(Player* player, Enemy** enemyArr, int enemyCnt)
+{
+	//적 방어도 다 지우기
+	for (int i = 0; i < enemyCnt; i++)
+	{
+		if (enemyArr[i]->isAlive)
+			enemyArr[i]->Armour = 0;
+	}
+	//디버프 -1
+}
