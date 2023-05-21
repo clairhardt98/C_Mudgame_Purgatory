@@ -2,7 +2,6 @@
 
 #include <stdlib.h>
 #include "Skill.h"
-#include "Enemy.h"
 
 
 #define PLAYER_SPRITE_HEIGHT 17

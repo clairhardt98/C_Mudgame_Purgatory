@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string.h>
-#include <stdbool.h>
 #include "Player.h"
 #include "Enemy.h"
 

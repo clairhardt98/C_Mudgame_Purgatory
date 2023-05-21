@@ -1,7 +1,7 @@
 #pragma once
-#include "Player.h"
-#include "UI.h"
 #include <stdlib.h>
+
+
 //#include <time.h>
 
 extern int RewardNum;
