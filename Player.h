@@ -1,7 +1,9 @@
 #pragma once
+
+#include <stdlib.h>
 #include "Skill.h"
 #include "Enemy.h"
-#include <stdlib.h>
+
 
 #define PLAYER_SPRITE_HEIGHT 17
 #define PLAYER_SPRITE_WIDTH 38
@@ -11,6 +13,9 @@
 
 #define PLAYER_ENERGY_POS_I PLAYER_HP_POS_I
 #define PLAYER_ENERGY_POS_J 33
+
+#define PLAYER_DEBUFF_POS_I 21
+#define PLAYER_DEBUFF_POS_J 15
 
 char PlayerSprite[PLAYER_SPRITE_HEIGHT][PLAYER_SPRITE_WIDTH];
 
@@ -35,6 +40,17 @@ typedef struct
 	float ArmourMultiplier;
 	float HitDmgMultiplier;
 
+	bool IsWeakened;
+	int RemainedWeakness;
+
+	bool CanUseMelee;
+	bool CanUseRange;
+	bool CanUseDefense;
+	bool CanUseSkill;
+
+	bool HasUniqueReward;
+	bool HasSkill;
+
 }Player;
 
 Player* InitPlayer();
@@ -56,9 +72,11 @@ void DrawPlayerEnergy(Player*);
 Player* InitPlayer()
 {
 	CreatePlayerSpriteArr();
-	DrawPlayer();
+	//DrawPlayer();
+
 	Player* player = (Player*)malloc(sizeof(Player));
-	player->Attack = 5;
+
+	player->Attack = 6;
 	player->Defense = 5;
 
 	player->MaxEnergy = 3;
@@ -76,6 +94,17 @@ Player* InitPlayer()
 	player->AttackDmgMultiplier = 1;
 	player->ArmourMultiplier = 1;
 	player->HitDmgMultiplier = 1;
+
+	player->RemainedWeakness = 0;
+	player->IsWeakened = false;
+
+	player->CanUseDefense = 1;
+	player->CanUseMelee = 1;
+	player->CanUseRange = 1;
+	player->CanUseSkill = 1;
+
+	player->HasUniqueReward = 0;
+	player->HasSkill = 0;
 
 	return player;
 }
@@ -201,4 +230,20 @@ void DrawPlayerEnergy(Player* player)
 	char PlayerEnergyStr[7];
 	sprintf(PlayerEnergyStr, "%d / %d", player->Energy, player->MaxEnergy);
 	DrawSentenceCenterAlign(PlayerEnergyStr, strlen(PlayerEnergyStr), PLAYER_ENERGY_POS_I, PLAYER_ENERGY_POS_J);
+}
+
+void DrawPlayerDebuff(Player* player)
+{
+	if (player->IsWeakened)
+	{
+		char PlayerDebuffStr[20];
+		sprintf(PlayerDebuffStr, "¾àÈ­ : %d", player->RemainedWeakness);
+		DrawSentenceCenterAlign(PlayerDebuffStr, strlen(PlayerDebuffStr), PLAYER_DEBUFF_POS_I, PLAYER_DEBUFF_POS_J);
+	}
+	else
+	{
+		char PlayerDebuffStr[20] = "    ";
+		DrawSentenceCenterAlign(PlayerDebuffStr, strlen(PlayerDebuffStr), PLAYER_DEBUFF_POS_I, PLAYER_DEBUFF_POS_J);
+	}
+
 }

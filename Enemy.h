@@ -1,7 +1,8 @@
 #pragma once
 
-#include "stdlib.h"
-#include "stdio.h"
+#include <stdbool.h>
+#include "Stage.h"
+
 
 #define MAXENEMY 3
 
@@ -32,7 +33,7 @@ typedef enum
 	ENEMYATTACK = 1,
 	ENEMYDEFENSE,
 	ENEMYWEAKEN,
-	ENEMYATTACKWITHWEAKEN
+	ENEMYCRUSH
 }EnemyPattern;
 
 typedef struct
@@ -62,10 +63,10 @@ typedef struct
 }Enemy;
 
 //상대 생성 및 소멸
-Enemy* InitEnemy(int);
+Enemy* InitEnemy(Stage*,int);
 void DestroyEnemy(Enemy*);
-Enemy** SpawnEnemy(int);
-void DestroyEnemyArr(Enemy**);
+Enemy** SpawnEnemy(Stage*);
+void DestroyEnemyArr(Enemy**, int);
 
 //출력
 void SetRandomEnemyName(Enemy*, int);
@@ -86,21 +87,22 @@ void Enemy_Defense(Enemy*);
 void Enemy_Hit(Enemy*, int);
 void Enemy_Die(Enemy*);
 
+
 bool IsAllEnemyDead(Enemy**, int);
 
 int getLine(FILE*);
 
-Enemy* InitEnemy(int seed)
+Enemy* InitEnemy(Stage* round, int seed)
 {
 	Enemy* enemy = (Enemy*)malloc(sizeof(Enemy));
 
 	enemy->isAlive = 1;
-	enemy->HPRandomVar = 3;
-	enemy->MaxHP = 10 + seed % enemy->HPRandomVar;
+	enemy->HPRandomVar = round->HPRandomVar;
+	enemy->MaxHP = round->MaxHP + seed % enemy->HPRandomVar;
 	enemy->CurrHP = enemy->MaxHP;
-	enemy->Attack = 6;
-	enemy->Defense = 3;
-	enemy->WeakenDuration = 2;
+	enemy->Attack = round->Attack;
+	enemy->Defense = round->Defense;
+	enemy->WeakenDuration = round->WeakenDuration;
 
 	enemy->Armour = 0;
 
@@ -120,14 +122,15 @@ void DestroyEnemy(Enemy* enemy)
 	free(enemy);
 }
 
-Enemy** SpawnEnemy(int EnemyCnt)
+Enemy** SpawnEnemy(Stage* round)
 {
 	srand(time(NULL));
+	int EnemyCnt = round->ToCreateMonsterNum;
 	Enemy** enemyArr = (Enemy**)malloc(EnemyCnt * sizeof(Enemy*));
 	for (int i = 0; i < EnemyCnt; i++)
 	{
 		int seed = rand();
-		enemyArr[i] = InitEnemy(seed);
+		enemyArr[i] = InitEnemy(round, seed);
 		enemyArr[i]->EnemyNo = i;
 		/*CreateEnemySpriteArr();
 		DrawEnemy(enemyArr[i]->EnemyNo);
@@ -153,10 +156,10 @@ void DrawEnemyArr(Enemy** enemyArr, int length)
 	}
 }
 
-void DestroyEnemyArr(Enemy** enemyArr)
+void DestroyEnemyArr(Enemy** enemyArr, int enemyCnt)
 {
-	int length = sizeof(enemyArr) / sizeof(enemyArr[0]);
-	for (int i = 0; i < length; i++)
+	//int length = sizeof(*enemyArr) / sizeof(enemyArr[0]);
+	for (int i = 0; i < enemyCnt; i++)
 	{
 		free(enemyArr[i]);
 	}
@@ -172,7 +175,7 @@ void DestroyEnemyArr(Enemy** enemyArr)
 
 void Enemy_Defense(Enemy* enemy)
 {
-	
+
 	enemy->Armour += (int)((float)enemy->Defense * enemy->ArmourMultiplier);
 }
 
@@ -185,11 +188,12 @@ void Enemy_Hit(Enemy* enemy, int Dmg)
 	else
 	{
 		int eDmg = Dmg - enemy->Armour;
+		enemy->Armour = 0;
+		DrawEnemyDamage(Dmg, enemy->EnemyNo);
 		if (eDmg < enemy->CurrHP)
 		{
 			enemy->CurrHP -= eDmg;
 			//sprintf(Statement, "%s가 %d만큼의 피해를 입었습니다.", enemy->Name, Dmg);
-			DrawEnemyDamage(Dmg, enemy->EnemyNo);
 		}
 		else
 		{
@@ -199,7 +203,7 @@ void Enemy_Hit(Enemy* enemy, int Dmg)
 			enemy->isAlive = 0;
 		}
 	}
-	
+
 	//피 0되면 죽는 로직
 //printf("출력문 전달 완료\n");
 

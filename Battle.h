@@ -1,4 +1,5 @@
 #pragma once
+
 #include <string.h>
 #include <stdbool.h>
 #include "Player.h"
@@ -10,16 +11,15 @@
 #define RANGE_ATTACK_EFFECT_POS_I 10
 #define RANGE_ATTACK_EFFECT_POS_J 88
 
-
-
 void PlayerMeleeAttack(Player*, Enemy*);
 bool PlayerRangeAttack(Player*, Enemy**, int);
 
 EnemyPattern SetEnemyAction(Enemy*, int);
 void DrawEnemyAction(Enemy*);
 void EnemyAction(Player*, Enemy*);
-
 void EnemyAttack(Enemy*, Player*);
+void EnemyWeaken(Enemy*, Player*);
+void EnemyCrush(Enemy*, Player*);
 
 void PlayerMeleeAttack(Player* player, Enemy* enemy)
 {
@@ -38,14 +38,6 @@ void PlayerMeleeAttack(Player* player, Enemy* enemy)
 
 	//공격 애니메이션 출력 로직
 
-}
-
-void EnemyAttack(Enemy* enemy, Player* player)
-{
-
-	int Dmg = (int)((float)enemy->Attack * enemy->AttackDmgMultiplier);
-	if (Dmg > 0)
-		Player_Hit(player, Dmg);
 }
 
 bool PlayerRangeAttack(Player* player, Enemy** enemyArr, int enemyCnt)
@@ -72,6 +64,37 @@ bool PlayerRangeAttack(Player* player, Enemy** enemyArr, int enemyCnt)
 	//광역공격 애니메이션 출력 로직
 }
 
+void EnemyAttack(Enemy* enemy, Player* player)
+{
+
+	int Dmg = (int)((float)enemy->Attack * enemy->AttackDmgMultiplier);
+	if (Dmg > 0)
+		Player_Hit(player, Dmg);
+}
+
+void EnemyWeaken(Enemy* enemy, Player* player)
+{
+	player->RemainedWeakness += enemy->WeakenDuration;
+	if (!player->IsWeakened)
+	{
+		player->IsWeakened = true;
+		player->AttackDmgMultiplier = 0.75f;
+	}
+}
+void EnemyCrush(Enemy* enemy, Player* player)
+{
+	int Dmg = (int)((float) (enemy->Attack / 2) * enemy->AttackDmgMultiplier);
+	if (Dmg > 0)
+		Player_Hit(player, Dmg);
+
+	player->RemainedWeakness += enemy->WeakenDuration / 2;
+	if (!player->IsWeakened)
+	{
+		player->IsWeakened = true;
+		player->AttackDmgMultiplier = 0.75f;
+	}
+
+}
 void DrawRangeAttackEffect()
 {
 	char RangeAttackEffect[70] = "<===============================================================>";
@@ -111,7 +134,7 @@ EnemyPattern SetEnemyAction(Enemy* enemy, int seed)
 	EnemyPattern EPattern;
 	if (temp == 0)
 	{
-		EPattern = ENEMYATTACKWITHWEAKEN;
+		EPattern = ENEMYCRUSH;
 	}
 	else if (temp > 0 && temp <= 2)
 	{
@@ -152,7 +175,7 @@ void DrawEnemyAction(Enemy* enemy)
 		break;
 	}
 
-	case ENEMYATTACKWITHWEAKEN:
+	case ENEMYCRUSH:
 	{
 		sprintf(enemy->NextPatternStr, "!%d #%d", enemy->Attack / 2, enemy->WeakenDuration / 2);
 		break;
@@ -182,14 +205,14 @@ void EnemyAction(Player* player, Enemy* enemy)
 	case ENEMYWEAKEN:
 	{
 		sprintf(Statement, "상대 %d. %s의 약화!", enemy->EnemyNo + 1, enemy->Name);
-		//약화 함수
+		EnemyWeaken(enemy, player);
 		break;
 	}
 
-	case ENEMYATTACKWITHWEAKEN:
+	case ENEMYCRUSH:
 	{
 		sprintf(Statement, "상대 %d. %s의 파쇄!", enemy->EnemyNo + 1, enemy->Name);
-		//적이 공격하고 약화시키는 함수
+		EnemyCrush(enemy, player);
 		break;
 	}
 
