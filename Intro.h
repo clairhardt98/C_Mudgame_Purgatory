@@ -48,4 +48,4 @@ void PrintThirdIntroSentence()
 	char Sentence[49] = "당신은 자리에서 일어나 무거운 발걸음을 옮깁니다.";
 	int Length = strlen(Sentence);
 	DrawSentenceCenterAlign(Sentence, Length, UIROW / 2, UICOL / 2);
-}
+}//

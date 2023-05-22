@@ -21,7 +21,7 @@ Stage** InitStageArr();
 Stage* InitStage();
 void ConfigStage(Stage**);
 
-void PrintStageEnterScreen(int);
+void PrintStageEnterScreen(int);//
 void PrintStageClearScreen(int);
 void DrawRoundStr(int);
 

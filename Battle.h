@@ -11,7 +11,7 @@
 
 void PlayerMeleeAttack(Player*, Enemy*);
 bool PlayerRangeAttack(Player*, Enemy**, int);
-
+//
 EnemyPattern SetEnemyAction(Enemy*, int);
 void DrawEnemyAction(Enemy*);
 void EnemyAction(Player*, Enemy*);

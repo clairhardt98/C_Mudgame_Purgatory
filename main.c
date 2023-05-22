@@ -348,3 +348,4 @@ void RewardStage(Player* player)
 	ApplyReward(rewardArr[Sel], player);
 	//보상 확인 결과 출력
 }
+//

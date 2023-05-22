@@ -198,7 +198,7 @@ void ApplyReward(Reward* reward, Player* player)
 		break;
 	}
 }
-
+//
 void ApplyRewardNo0(Player* player)
 {
 	player->Attack += 1;

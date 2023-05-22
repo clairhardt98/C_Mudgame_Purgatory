@@ -22,7 +22,7 @@
 
 char ScreenArray[UIROW][UICOL];
 char Statement[STATEMENT_MAXLENGTH + 1];
-int StatementPrintCnt = 0;
+int StatementPrintCnt = 0;//
 
 void ClearUI();
 void PrintScreen();
