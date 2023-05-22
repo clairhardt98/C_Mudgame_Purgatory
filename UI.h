@@ -20,6 +20,9 @@
 #define STATEMENT_DRAW_POS_I 28
 #define STATEMENT_DRAW_POS_J 88
 
+#define MYINFO_POS_I 18
+#define MYINFO_POS_J 90
+
 char ScreenArray[UIROW][UICOL];
 char Statement[STATEMENT_MAXLENGTH + 1];
 int StatementPrintCnt = 0;
@@ -35,6 +38,7 @@ void DrawPlayerMenuUI();
 void DrawInfoMenuUI();
 void DrawMenuSentence();
 void DrawStatement();
+void DrawMyInfoUI();
 
 void PrintScreen()
 {
@@ -175,14 +179,14 @@ void DrawUI()
 
 void DrawMenuSentence()
 {
-	char MeleeAttackStr[20] = "1. 타격";
-	char RangeAttackStr[20] = "2. 절단";
-	char DefenseStr[20] = "3. 수비";
+	char MeleeAttackStr[20] = "1. Melee(1)";
+	char RangeAttackStr[20] = "2. Range(2)";
+	char DefenseStr[20] = "3. Defense(1)";
 	char SkillStr[20] = "4. ???";
-	char PlayerInfoStr[20] = "5. 내 정보";
-	char EnemyInfoStr[20] = "6. 적 정보";
-	char GameInfoStr[20] = "7. 게임 정보";
-	char SaveQuitStr[20] = "8. 종료";
+	char PlayerInfoStr[20] = "5. My info";
+	char EnemyInfoStr[20] = "6. Foe Info";
+	char GameInfoStr[20] = "7. Help";
+	char SaveQuitStr[20] = "8. Quit";
 
 	DrawSentenceLeftAlign(MeleeAttackStr, strlen(MeleeAttackStr), MENU_BOX_STARTPOS_I + 3, MENU_BOX_STARTPOS_J + 5);
 	DrawSentenceLeftAlign(RangeAttackStr, strlen(RangeAttackStr), MENU_BOX_STARTPOS_I + 3, MENU_BOX_STARTPOS_J + MENU_BOX_WIDTH / 4 + 4);
@@ -207,3 +211,24 @@ void ClearStatement()
 		Statement[i] = ' ';
 	DrawSentenceCenterAlign(Statement, STATEMENT_MAXLENGTH, STATEMENT_DRAW_POS_I, STATEMENT_DRAW_POS_J);
 }
+
+void DrawMyInfoUI()
+{
+	for (int i = MYINFO_POS_I; i < UIROW; i++)
+	{
+		for (int j = MYINFO_POS_J; j < UICOL; j++)
+		{
+			if (i == MYINFO_POS_I || i == UIROW-1)
+				ScreenArray[i][j] = '-';
+			else if (j == MYINFO_POS_J || j == UICOL - 1)
+				ScreenArray[i][j] = '|';
+			else
+				ScreenArray[i][j] = ' ';
+		}
+	}
+	ScreenArray[MYINFO_POS_I][MYINFO_POS_J] = '+';
+	ScreenArray[MYINFO_POS_I][UICOL - 1] = '+';
+	ScreenArray[UIROW - 1][MYINFO_POS_J] = '+';
+	ScreenArray[UIROW - 1][UICOL - 1] = '+';
+}
+

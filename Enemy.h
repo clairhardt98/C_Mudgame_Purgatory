@@ -75,13 +75,12 @@ void DrawEnemyArr(Enemy**, int);
 void DisplayEnemyHealth(Enemy*);
 
 void DrawEnemyDamage(int, int);
-
 void DrawEnemyPatternStr(Enemy*);
+void DrawEnemyStatus(Enemy*);
 
 void Enemy_Defense(Enemy*);
 void Enemy_Hit(Enemy*, int);
 void Enemy_Die(Enemy*);
-
 
 bool IsAllEnemyDead(Enemy**, int);
 
@@ -315,4 +314,48 @@ void DrawEnemyPatternStr(Enemy* enemy)
 		EnemyStrPosJ = 6 + ENEMY_SPRITE_STARTPOS_J + 2 * (ENEMY_INTERVAL + ENEMY_SPRITE_WIDTH);
 
 	DrawSentenceCenterAlign(enemy->NextPatternStr, strlen(enemy->NextPatternStr), ENEMY_PATTERN_STR_POS_I, EnemyStrPosJ);
+}
+
+void DrawEnemyStatus(Enemy* enemy)
+{
+	int idx = enemy->EnemyNo;
+
+	if (idx == 0)
+		idx = 1;
+	else if (idx == 1)
+		idx = 0;
+
+	char EnemyAttackStr[10];
+	char EnemyDefenseStr[10];
+	char NextPattern[20] = "Next Pattern";
+	char tempPattern[10];
+	
+	switch (enemy->NextPattern)
+	{
+	case ENEMYATTACK:
+		strcpy(tempPattern, "-> Attack");
+		break;
+	case ENEMYDEFENSE:
+		strcpy(tempPattern, "-> Defense");
+		break;
+	case ENEMYWEAKEN:
+		strcpy(tempPattern, "-> Weaken");
+		break;
+	case ENEMYCRUSH:
+		strcpy(tempPattern, "-> Crush");
+		break;
+	}
+
+	sprintf(EnemyAttackStr, "Atk : %d", enemy->Attack);
+	sprintf(EnemyDefenseStr, "Def : %d", enemy->Defense);
+
+	int i = 0;
+	DrawSentenceCenterAlign(EnemyAttackStr, strlen(EnemyAttackStr), ENEMY_HEALTH_POS_I + 2 + i, 
+		ENEMY_HEALTH_POS_J + idx * (ENEMY_INTERVAL + ENEMY_SPRITE_WIDTH)); i++;
+	DrawSentenceCenterAlign(EnemyDefenseStr, strlen(EnemyDefenseStr), ENEMY_HEALTH_POS_I + 2 + i,
+		ENEMY_HEALTH_POS_J + idx * (ENEMY_INTERVAL + ENEMY_SPRITE_WIDTH)); i++;
+	DrawSentenceCenterAlign(NextPattern, strlen(NextPattern), ENEMY_HEALTH_POS_I + 2 + i,
+		ENEMY_HEALTH_POS_J + idx * (ENEMY_INTERVAL + ENEMY_SPRITE_WIDTH) + 1); i++;
+	DrawSentenceCenterAlign(tempPattern, strlen(tempPattern), ENEMY_HEALTH_POS_I + 2 + i,
+		ENEMY_HEALTH_POS_J + idx * (ENEMY_INTERVAL + ENEMY_SPRITE_WIDTH) + 1); i++;
 }

@@ -1,9 +1,4 @@
 #define _CRT_SECURE_NO_WARNINGS
-
-#include <fcntl.h>
-#include <io.h>
-#include <locale.h>
-
 #include "UI.h"
 #include "Intro.h"
 #include "Battle.h"
@@ -23,6 +18,11 @@ void PrepareEnemyArr(Enemy**, int);
 void OnPlayerTurnEnd(Player*, Enemy**, int);
 void OnRoundStart(Player*);
 void RewardStage(Player*);
+void OnClearGame(Player*, Stage**);
+void OnPlayerDeath(Player*, Stage**);
+void DrawMyInfo(Player*);
+void DrawEnemyArrInfo(Enemy**, int);
+void DrawQuitScreen();
 
 enum PlayerActionEnum
 {
@@ -36,9 +36,9 @@ enum PlayerActionEnum
 	QUIT
 };
 
+
 int main()
 {
-	setlocale(LC_ALL, "");
 	int Selection;
 	ClearUI();
 	Intro();
@@ -65,6 +65,7 @@ int main()
 		//enter battle
 		while (1)
 		{
+			
 			//스테이지 시작 안내 출력
 			int seed = rand();
 
@@ -76,15 +77,20 @@ int main()
 			{
 				if (player->MaxEnergy == player->Energy)
 				{
-					sprintf(Statement, "나의 턴!");
+					sprintf(Statement, "My Turn!");
 					RenewScreen(player, enemyArr, enemyCnt);
 				}
 				int Selection;
 
 				while (1)//잘못된 입력 검출 로직
 				{
-					printf("무엇을 할까?\n>> ");
+					printf("What should I do?\n>> ");
 					scanf("%d", &Selection);
+					if (Selection == 99)
+					{
+						RoundIdx = 9;
+						StageClearFlag = true;
+					}
 					//플레이어 로직
 					if (PlayerAction(Selection, player, enemyArr, enemyCnt))
 						break;
@@ -103,7 +109,7 @@ int main()
 			}
 			OnPlayerTurnEnd(player, enemyArr, enemyCnt);
 			Sleep(2000);
-			sprintf(Statement, "상대의 턴!");
+			sprintf(Statement, "Enemy Turn!");
 			RenewScreen(player, enemyArr, enemyCnt);
 			Sleep(2000);
 			//상대의 턴
@@ -116,6 +122,12 @@ int main()
 					EnemyAction(player, enemyArr[i]);
 					RenewScreen(player, enemyArr, enemyCnt);
 					Sleep(2000);
+					//플레이어 사망 체크
+					if (player->CurrHP == 0)
+					{
+						OnPlayerDeath(player, stageArr);
+					}
+
 				}
 			}
 			//end of turn
@@ -125,9 +137,22 @@ int main()
 		//reward logic
 		DestroyEnemyArr(enemyArr,enemyCnt);
 		PrintStageClearScreen(RoundIdx);
+		
+		if (RoundIdx == 9)
+		{
+			break;
+		}
+		else
+		{
+			RewardStage(player);
+		}
+		
 	}
 	//exit stage
 	//set stage pointer to next stage
+	//게임 엔딩(라운드 10 클리어)
+	OnClearGame(player, stageArr);
+
 }
 
 void RenewScreen(Player* player, Enemy** enemyArr, int enemyCnt)
@@ -159,7 +184,7 @@ void PrintEffect(int sel, int target)
 	{
 	case MELEE:
 	{
-		char tempEffectStatement[10] = "타격!";
+		char tempEffectStatement[10] = "Melee!";
 		ClearStatement();
 		DrawSentenceCenterAlign(tempEffectStatement, strlen(tempEffectStatement),
 			STATEMENT_DRAW_POS_I, STATEMENT_DRAW_POS_J);
@@ -168,7 +193,7 @@ void PrintEffect(int sel, int target)
 	}
 	case RANGE:
 	{
-		char tempEffectStatement[10] = "절단!";
+		char tempEffectStatement[10] = "Range!";
 		ClearStatement();
 		DrawSentenceCenterAlign(tempEffectStatement, strlen(tempEffectStatement),
 			STATEMENT_DRAW_POS_I, STATEMENT_DRAW_POS_J);
@@ -190,12 +215,12 @@ bool PlayerAction(int sel, Player* player, Enemy** enemyArr, int enemyCnt)
 	case MELEE:
 		if (!player->CanUseMelee)
 		{
-			sprintf(Statement, "타격을 사용할 수 없다!");
+			sprintf(Statement, "Cannot Use Melee!");
 			return 0;
 		}
 
 		//melee attack logic
-		printf("대상 : ");
+		printf("Target : ");
 		for (int i = 0; i < enemyCnt; i++)
 		{
 			if (enemyArr[i]->isAlive)
@@ -209,7 +234,7 @@ bool PlayerAction(int sel, Player* player, Enemy** enemyArr, int enemyCnt)
 		while ((targetEnemy > enemyCnt) || (targetEnemy <= 0) || !enemyArr[targetEnemy - 1]->isAlive)
 		{
 			RenewScreen(player, enemyArr, enemyCnt);
-			printf("대상 : ");
+			printf("Target : ");
 			for (int i = 0; i < enemyCnt; i++)
 			{
 				if (enemyArr[i]->isAlive)
@@ -229,7 +254,7 @@ bool PlayerAction(int sel, Player* player, Enemy** enemyArr, int enemyCnt)
 	case RANGE:
 		if (!player->CanUseRange)
 		{
-			sprintf(Statement, "절단을 사용할 수 없다!");
+			sprintf(Statement, "Cannot Use Range!");
 			return 0;
 		}
 		if (PlayerRangeAttack(player, enemyArr, enemyCnt))
@@ -239,7 +264,7 @@ bool PlayerAction(int sel, Player* player, Enemy** enemyArr, int enemyCnt)
 	case DEFENSE:
 		if (!player->CanUseDefense)
 		{
-			sprintf(Statement, "수비를 사용할 수 없다!");
+			sprintf(Statement, "Cannot Use Defense!");
 			return 0;
 		}
 		Player_Defense(player);
@@ -249,26 +274,27 @@ bool PlayerAction(int sel, Player* player, Enemy** enemyArr, int enemyCnt)
 		if (!player->CanUseSkill || !player->HasSkill)
 		{
 			if(!player->CanUseSkill)
-				sprintf(Statement, "스킬을 사용할 수 없다!");
+				sprintf(Statement, "Cannot Use Skill!");
 
 			if(!player->HasSkill)
-				sprintf(Statement, "스킬을 보유하고 있지 않습니다.");
+				sprintf(Statement, "You Don't have Skill.");
 			return 0;
 		}
 		
 		//스킬
 		break;
 	case PLAYERINFO:
-		//내 정보
+		DrawMyInfo(player);
 		break;
 	case ENEMYINFO:
-		//적 정보
+		DrawEnemyArrInfo(enemyArr,enemyCnt);
 		break;
 	case GAMEINFO:
 		//게임 정보
 		break;
 	case QUIT:
-		//종료
+		DrawQuitScreen();
+		exit(1);
 		break;
 	}
 	if (IsAllEnemyDead(enemyArr, enemyCnt)) StageClearFlag = true;
@@ -339,19 +365,113 @@ void OnRoundStart(Player* player)
 
 void RewardStage(Player* player)
 {
-	Reward** rewardArr = (Reward*)malloc(RewardNum * sizeof(Reward*));
-	//보상 배열 세팅
+	srand(time(NULL));
+	Reward** rewardArr = (Reward**)malloc(RewardNum * sizeof(Reward*));
+	
+	int rewardNoArr[10];
+
 	for (int i = 0; i < RewardNum; i++)
 	{
-		GenerateRewardNo(rewardArr[i], player);
+		int seed = rand();
+		rewardArr[i] = (Reward*)malloc(RewardNum * sizeof(Reward));
+		GenerateRewardNo(rewardArr[i], player, seed);
+		if (i > 0 && rewardArr[i]->RewardNo == rewardArr[i-1]->RewardNo)
+		{
+			free(rewardArr[i]);
+			i--;
+			continue;
+		}
 		SetReward(rewardArr[i]);
 	}
+	//중복 방지 로직 필요
 	//선택지 배열 출력
+	ClearUI();
+	PrintRewardScreen(rewardArr, RewardNum);
+	PrintScreen();
+	
 	//선택지 입력
 	int Sel;
+	printf("Select reward\n>> ");
 	scanf("%d", &Sel);
 	Sel--;
-
+	
 	ApplyReward(rewardArr[Sel], player);
-	//보상 확인 결과 출력
+	for (int i = 0; i < RewardNum; i++)
+	{
+		free(rewardArr[i]);
+	}
+	free(rewardArr);
+}
+
+void OnClearGame(Player* player, Stage** stageArr)
+{
+	//동적할당 해제
+	DestroyPlayer(player);
+	DestroyStageArr(stageArr);
+	//클리어 화면 출력
+	char clearstr[3][100];
+	char endStr[10] = "End";
+	strcpy(clearstr[0], "A faint light comes out of the enemy's fall");
+	strcpy(clearstr[1], "You started to walk out to there");
+	strcpy(clearstr[2], "No one knows if there's an end to the road");
+	for (int i = 0; i < 3; i++)
+	{
+		ClearUI();
+		DrawPlayer();
+		DrawSentenceCenterAlign(clearstr[i], strlen(clearstr[i]), 20, 64);
+		PrintScreen();
+		int temp = _getch();
+	}
+	ClearUI();
+	DrawSentenceCenterAlign(endStr, strlen(endStr), 20, 64);
+	PrintScreen();
+	int temp = _getch();
+	//게임 종료
+	exit(1);
+
+}
+
+void OnPlayerDeath(Player* player, Stage** stageArr)
+{
+	DestroyPlayer(player);
+	DestroyStageArr(stageArr);
+
+	char endStr[10] = "You Died";
+	ClearUI();
+	DrawSentenceCenterAlign(endStr, strlen(endStr), 20, 64);
+	PrintScreen();
+	int temp = _getch();
+	exit(1);
+}
+
+void DrawMyInfo(Player* player)
+{
+	DrawMyInfoUI();
+	DrawPlayerStatus(player);
+	PrintScreen();
+	printf("Press Any Key to return to game\n>>");
+	int temp = _getch();
+}
+
+void DrawEnemyArrInfo(Enemy** enemyArr, int enemyCnt)
+{
+	
+	for (int i = 0; i < enemyCnt; i++)
+	{
+		if(enemyArr[i]->isAlive)
+			DrawEnemyStatus(enemyArr[i]);
+	}
+	PrintScreen();
+	printf("Press Any Key to return to game\n>>");
+	int temp = _getch();
+}
+
+void DrawQuitScreen()
+{
+	char quitStr[10] = "Bye";
+	ClearUI();
+	DrawSentenceCenterAlign(quitStr, strlen(quitStr), 20, 64);
+	PrintScreen();
+	printf("Press Any Key to quit\n>>");
+	int temp = _getch();
 }

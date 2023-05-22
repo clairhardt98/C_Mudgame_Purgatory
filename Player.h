@@ -55,17 +55,14 @@ typedef struct
 
 Player* InitPlayer();
 void DestroyPlayer(Player*);
-
-
 void Player_Defense(Player*);
 void Player_Hit(Player*, int);
 void Player_Die(Player*);
-
 void CreatePlayerSpriteArr();
 void DrawPlayer();
-
 void DrawPlayerHP(Player*);
 void DrawPlayerEnergy(Player*);
+void DrawPlayerStatus(Player*);
 
 
 Player* InitPlayer()
@@ -75,7 +72,7 @@ Player* InitPlayer()
 
 	Player* player = (Player*)malloc(sizeof(Player));
 
-	player->Attack = 6;
+	player->Attack = 5;
 	player->Defense = 5;
 
 	player->MaxEnergy = 3;
@@ -87,7 +84,7 @@ Player* InitPlayer()
 
 	player->Armour = 0;
 
-	player->MaxHP = 60;
+	player->MaxHP = 50;
 	player->CurrHP = player->MaxHP;
 
 	player->AttackDmgMultiplier = 1;
@@ -113,8 +110,6 @@ void DestroyPlayer(Player* player)
 	free(player);
 }
 
-
-
 void Player_Defense(Player* player)
 {
 	if (player->Energy >= player->DefenseEnergyNeeded)
@@ -122,17 +117,25 @@ void Player_Defense(Player* player)
 		int tempArmour = (int)(player->Defense * player->ArmourMultiplier);
 		player->Armour += tempArmour;
 		player->Energy -= player->DefenseEnergyNeeded;
-		sprintf(Statement, "이번 턴 방어도가 %d 증가합니다.", tempArmour);
+		sprintf(Statement, "Gain %d Armour This Turn", tempArmour);
 	}
 }
 
 void Player_Hit(Player* player, int Dmg)
 {
 	int eDmg = player->Armour - Dmg;
-	if (eDmg < 0)
+	if (eDmg < 0 )
 	{
-		player->CurrHP += eDmg;
-		player->Armour = 0;
+		if (player->CurrHP += eDmg > 0)
+		{
+			player->CurrHP += eDmg;
+			player->Armour = 0;
+		}
+		else
+		{
+			player->CurrHP = 0;
+		}
+		
 	}
 	else
 	{
@@ -143,6 +146,8 @@ void Player_Hit(Player* player, int Dmg)
 void Player_Die(Player* player)
 {
 	//플레이어 사망 시 로직
+	//사망 문구 출력
+	//스테이지 어레이랑 플레이어 할당 해제후 종료
 }
 
 void CreatePlayerSpriteArr()
@@ -198,13 +203,65 @@ void DrawPlayerDebuff(Player* player)
 	if (player->IsWeakened)
 	{
 		char PlayerDebuffStr[20];
-		sprintf(PlayerDebuffStr, "��ȭ : %d", player->RemainedWeakness);
+		sprintf(PlayerDebuffStr, "Weaken : %d", player->RemainedWeakness);
 		DrawSentenceCenterAlign(PlayerDebuffStr, strlen(PlayerDebuffStr), PLAYER_DEBUFF_POS_I, PLAYER_DEBUFF_POS_J);
 	}
 	else
 	{
-		char PlayerDebuffStr[20] = "    ";
+		char PlayerDebuffStr[20] = "       ";
 		DrawSentenceCenterAlign(PlayerDebuffStr, strlen(PlayerDebuffStr), PLAYER_DEBUFF_POS_I, PLAYER_DEBUFF_POS_J);
 	}
 
+}
+
+void DrawPlayerStatus(Player* player)
+{
+	int startposi = 21;
+	int startposj = 93;
+	char PlayerHPStr[20];
+	char PlayerAttackStr[20];
+	char PlayerDefenseStr[20];
+	char PlayerEnergyStr[20];
+	//
+	
+
+	sprintf(PlayerHPStr, "HP : %d / %d", player->CurrHP, player->MaxHP);
+	sprintf(PlayerAttackStr, "Attack : %d", player->Attack);
+	sprintf(PlayerDefenseStr, "Defense : %d", player->Defense);
+	sprintf(PlayerEnergyStr, "Energy : %d / %d", player->Energy, player->MaxEnergy);
+	DrawSentenceLeftAlign(PlayerHPStr, strlen(PlayerHPStr), startposi, startposj); startposi += 2;
+	DrawSentenceLeftAlign(PlayerAttackStr, strlen(PlayerAttackStr), startposi, startposj); startposi += 2;
+	DrawSentenceLeftAlign(PlayerDefenseStr, strlen(PlayerDefenseStr), startposi, startposj); startposi += 2;
+	DrawSentenceLeftAlign(PlayerEnergyStr, strlen(PlayerEnergyStr), startposi, startposj); startposi += 2;
+
+	if (!player->CanUseRange)
+	{
+		char PlayerCannotUseRangeStr[20] = "Cannot Use Range";
+		DrawSentenceLeftAlign(PlayerCannotUseRangeStr, strlen(PlayerCannotUseRangeStr), startposi, startposj); startposi += 2;
+	}
+	if (!player->CanUseSkill)
+	{
+		char PlayerCannotUseSkillStr[20] = "Cannot Use Skill";
+		DrawSentenceLeftAlign(PlayerCannotUseSkillStr, strlen(PlayerCannotUseSkillStr), startposi, startposj); startposi += 2;
+	}
+	if (player->IsWeakened)
+	{
+		char PlayerDebuffStr[20];
+		sprintf(PlayerDebuffStr, "Debuff : Weaken");
+		DrawSentenceLeftAlign(PlayerDebuffStr, strlen(PlayerDebuffStr), startposi, startposj); startposi += 2;
+	}
+	if (!player->HasSkill)
+	{
+		char PlayerHasSkillStr[20] = "Dont Have Skill";
+		DrawSentenceLeftAlign(PlayerHasSkillStr, strlen(PlayerHasSkillStr), startposi, startposj); startposi += 2;
+	}
+	else
+	{
+		//skill
+	}
+	if (player->HasUniqueReward)
+	{
+		char PlayerHasUniqueRewardStr[20] = "Has Unique Reward";
+		DrawSentenceLeftAlign(PlayerHasUniqueRewardStr, strlen(PlayerHasUniqueRewardStr), startposi, startposj); startposi += 2;
+	}
 }

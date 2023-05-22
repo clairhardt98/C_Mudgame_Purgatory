@@ -20,6 +20,7 @@ typedef struct
 Stage** InitStageArr();
 Stage* InitStage();
 void ConfigStage(Stage**);
+void DestoryStageArr(Stage**);
 
 void PrintStageEnterScreen(int);//
 void PrintStageClearScreen(int);
@@ -43,7 +44,7 @@ Stage** InitStageArr()
 
 void ConfigStage(Stage** stageArr)
 {
-	//1라운드
+
 	stageArr[0]->StageCnt = 1;
 	stageArr[0]->RoundCnt = 1;
 	stageArr[0]->ToCreateMonsterNum = 1;
@@ -52,7 +53,7 @@ void ConfigStage(Stage** stageArr)
 	stageArr[0]->Attack = 5;
 	stageArr[0]->Defense = 3;
 	stageArr[0]->WeakenDuration = 2;
-	//2라운드
+
 	stageArr[1]->StageCnt = 1;
 	stageArr[1]->RoundCnt = 2;
 	stageArr[1]->ToCreateMonsterNum = 2;
@@ -61,7 +62,7 @@ void ConfigStage(Stage** stageArr)
 	stageArr[1]->Attack = 5;
 	stageArr[1]->Defense = 3;
 	stageArr[1]->WeakenDuration = 2;
-	//3라운드
+
 	stageArr[2]->StageCnt = 1;
 	stageArr[2]->RoundCnt = 3;
 	stageArr[2]->ToCreateMonsterNum = 3;
@@ -70,7 +71,7 @@ void ConfigStage(Stage** stageArr)
 	stageArr[2]->Attack = 5;
 	stageArr[2]->Defense = 3;
 	stageArr[2]->WeakenDuration = 2;
-	//4라운드
+
 	stageArr[3]->StageCnt = 1;
 	stageArr[3]->RoundCnt = 4;
 	stageArr[3]->ToCreateMonsterNum = 1;
@@ -79,7 +80,7 @@ void ConfigStage(Stage** stageArr)
 	stageArr[3]->Attack = 6;
 	stageArr[3]->Defense = 4;
 	stageArr[3]->WeakenDuration = 3;
-	//5라운드
+
 	stageArr[4]->StageCnt = 1;
 	stageArr[4]->RoundCnt = 5;
 	stageArr[4]->ToCreateMonsterNum = 2;
@@ -88,7 +89,7 @@ void ConfigStage(Stage** stageArr)
 	stageArr[4]->Attack = 6;
 	stageArr[4]->Defense = 4;
 	stageArr[4]->WeakenDuration = 3;
-	//6라운드
+
 	stageArr[5]->StageCnt = 1;
 	stageArr[5]->RoundCnt = 6;
 	stageArr[5]->ToCreateMonsterNum = 3;
@@ -97,7 +98,7 @@ void ConfigStage(Stage** stageArr)
 	stageArr[5]->Attack = 6;
 	stageArr[5]->Defense = 4;
 	stageArr[5]->WeakenDuration = 3;
-	//7라운드(중간보스)
+
 	stageArr[6]->StageCnt = 1;
 	stageArr[6]->RoundCnt = 7;
 	stageArr[6]->ToCreateMonsterNum = 1;
@@ -106,7 +107,7 @@ void ConfigStage(Stage** stageArr)
 	stageArr[6]->Attack = 8;
 	stageArr[6]->Defense = 5;
 	stageArr[6]->WeakenDuration = 3;
-	//8라운드
+
 	stageArr[7]->StageCnt = 1;
 	stageArr[7]->RoundCnt = 8;
 	stageArr[7]->ToCreateMonsterNum = 3;
@@ -115,7 +116,7 @@ void ConfigStage(Stage** stageArr)
 	stageArr[7]->Attack = 6;
 	stageArr[7]->Defense = 4;
 	stageArr[7]->WeakenDuration = 3;
-	//9라운드(상점 라운드)
+
 	stageArr[8]->StageCnt = 1;
 	stageArr[8]->RoundCnt = 9;
 	stageArr[8]->ToCreateMonsterNum = 1;
@@ -124,8 +125,8 @@ void ConfigStage(Stage** stageArr)
 	stageArr[8]->Attack = 5;
 	stageArr[8]->Defense = 3;
 	stageArr[8]->WeakenDuration = 2;
-	//19라운드(보스)
-	stageArr[9]->StageCnt = 1;
+
+ 	stageArr[9]->StageCnt = 1;
 	stageArr[9]->RoundCnt = 19;
 	stageArr[9]->ToCreateMonsterNum = 1;
 	stageArr[9]->HPRandomVar = 9;
@@ -153,6 +154,7 @@ void PrintStageClearScreen(int roundIdx)
 	char str[20];
 	sprintf(str, "Round %d Clear!", roundIdx + 1);
 	ClearUI();
+	DrawPlayer();
 	DrawSentenceCenterAlign(str, strlen(str), UIROW / 2, UICOL / 2);
 	PrintScreen();
 	temp = _getch();
@@ -163,4 +165,13 @@ void DrawRoundStr(int roundIdx)
 	char str[20];
 	sprintf(str, "Round %d", roundIdx);
 	DrawSentenceCenterAlign(str, strlen(str), 2, 8);
+}
+
+void DestroyStageArr(Stage** stageArr)
+{
+	for (int i = 0; i < MAXROUND; i++)
+	{
+		free(stageArr[i]);
+	}
+	free(stageArr);
 }

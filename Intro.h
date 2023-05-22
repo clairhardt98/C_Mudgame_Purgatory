@@ -29,7 +29,7 @@ void Intro()
 
 void PrintFirstIntroSentence()
 {
-	char Sentence[31] = "당신은 어둠속에서 눈을 뜹니다.";
+	char Sentence[40] = "You open your eyes in the dark.";
 	int Length = strlen(Sentence);
 	DrawSentenceCenterAlign(Sentence, Length, UIROW / 2, UICOL / 2);
 }
@@ -37,7 +37,7 @@ void PrintFirstIntroSentence()
 void PrintSecondIntroSentence()
 {
 	ClearUI();
-	char Sentence[52] = "주변을 둘러보던 당신은 낡은 검과 방패를 발견합니다.";
+	char Sentence[74] = "Looking around, you find an rusty sword and shield.";
 	int Length = strlen(Sentence);
 	DrawSentenceCenterAlign(Sentence, Length, UIROW / 2, UICOL / 2);
 }
@@ -45,7 +45,7 @@ void PrintSecondIntroSentence()
 void PrintThirdIntroSentence()
 {
 	ClearUI();
-	char Sentence[49] = "당신은 무거운 몸을 이끌고 걸음을 옮깁니다.";
+	char Sentence[61] = "You lead a heavy body and move.";
 	int Length = strlen(Sentence);
 	DrawSentenceCenterAlign(Sentence, Length, UIROW / 2, UICOL / 2);
 }//

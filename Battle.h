@@ -31,8 +31,6 @@ void PlayerMeleeAttack(Player* player, Enemy* enemy)
 	else
 	{
 	}
-
-
 }
 
 bool PlayerRangeAttack(Player* player, Enemy** enemyArr, int enemyCnt)
@@ -53,7 +51,7 @@ bool PlayerRangeAttack(Player* player, Enemy** enemyArr, int enemyCnt)
 	}
 	else
 	{
-		sprintf(Statement, "에너지가 부족합니다!");
+		sprintf(Statement, "Not Enough Energy!");
 		return 0;
 	}
 	//�������� �ִϸ��̼� ��� ����
@@ -183,28 +181,28 @@ void EnemyAction(Player* player, Enemy* enemy)
 	{
 	case ENEMYATTACK:
 	{
-		sprintf(Statement, "적 %d. %s의 공격!", enemy->EnemyNo + 1, enemy->Name);
+		sprintf(Statement, "Enemy %d. %s used Attack!", enemy->EnemyNo + 1, enemy->Name);
 		EnemyAttack(enemy, player);
 		break;
 	}
 
 	case ENEMYDEFENSE:
 	{
-		sprintf(Statement, "적 %d. %s의 수비!", enemy->EnemyNo + 1, enemy->Name);
+		sprintf(Statement, "Enemy %d. %s used Defense!", enemy->EnemyNo + 1, enemy->Name);
 		Enemy_Defense(enemy);
 		break;
 	}
 
 	case ENEMYWEAKEN:
 	{
-		sprintf(Statement, "적 %d. %s의 약화", enemy->EnemyNo + 1, enemy->Name);
+		sprintf(Statement, "Enemy %d. %s used Weaken", enemy->EnemyNo + 1, enemy->Name);
 		EnemyWeaken(enemy, player);
 		break;
 	}
 
 	case ENEMYCRUSH:
 	{
-		sprintf(Statement, "적 %d. %s의 파쇄!", enemy->EnemyNo + 1, enemy->Name);
+		sprintf(Statement, "Enemy %d. %s used Crush!", enemy->EnemyNo + 1, enemy->Name);
 		EnemyCrush(enemy, player);
 		break;
 	}
