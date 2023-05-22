@@ -22,7 +22,7 @@ char PlayerSprite[PLAYER_SPRITE_HEIGHT][PLAYER_SPRITE_WIDTH];
 typedef struct
 {
 	unsigned int MaxHP;
-	unsigned int CurrHP;
+	unsigned int CurrHP;//
 
 	unsigned int Attack;
 	unsigned int Defense;
