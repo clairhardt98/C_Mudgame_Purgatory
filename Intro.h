@@ -29,7 +29,7 @@ void Intro()
 
 void PrintFirstIntroSentence()
 {
-	char Sentence[31] = "´ç½ÅÀº ¾îµÒ¼Ó¿¡¼­ ´«À» ¶å´Ï´Ù.";
+	char Sentence[31] = "ë‹¹ì‹ ì€ ì–´ë‘ ì†ì—ì„œ ëˆˆì„ ëœ¹ë‹ˆë‹¤.";
 	int Length = strlen(Sentence);
 	DrawSentenceCenterAlign(Sentence, Length, UIROW / 2, UICOL / 2);
 }
@@ -37,7 +37,7 @@ void PrintFirstIntroSentence()
 void PrintSecondIntroSentence()
 {
 	ClearUI();
-	char Sentence[52] = "ÁÖº¯À» »ìÆìº¸´ø ´ç½ÅÀº ³°Àº °Ë°ú ¹æÆĞ¸¦ ¹ß°ßÇÕ´Ï´Ù.";
+	char Sentence[52] = "ì£¼ë³€ì„ ë‘˜ëŸ¬ë³´ë˜ ë‹¹ì‹ ì€ ë‚¡ì€ ê²€ê³¼ ë°©íŒ¨ë¥¼ ë°œê²¬í•©ë‹ˆë‹¤.";
 	int Length = strlen(Sentence);
 	DrawSentenceCenterAlign(Sentence, Length, UIROW / 2, UICOL / 2);
 }
@@ -45,7 +45,7 @@ void PrintSecondIntroSentence()
 void PrintThirdIntroSentence()
 {
 	ClearUI();
-	char Sentence[49] = "´ç½ÅÀº ÀÚ¸®¿¡¼­ ÀÏ¾î³ª ¹«°Å¿î ¹ß°ÉÀ½À» ¿Å±é´Ï´Ù.";
+	char Sentence[49] = "ë‹¹ì‹ ì€ ë¬´ê±°ìš´ ëª¸ì„ ì´ëŒê³  ê±¸ìŒì„ ì˜®ê¹ë‹ˆë‹¤.";
 	int Length = strlen(Sentence);
 	DrawSentenceCenterAlign(Sentence, Length, UIROW / 2, UICOL / 2);
 }//

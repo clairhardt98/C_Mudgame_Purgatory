@@ -62,27 +62,22 @@ typedef struct
 	char NextPatternStr[10];
 }Enemy;
 
-//상대 생성 및 소멸
 Enemy* InitEnemy(Stage*,int);
 void DestroyEnemy(Enemy*);
 Enemy** SpawnEnemy(Stage*);
 void DestroyEnemyArr(Enemy**, int);
 
-//출력
 void SetRandomEnemyName(Enemy*, int);
 void DisplayEnemyName(Enemy*);
-//스프라이트 생성 및 출력
 void CreateEnemySpriteArr();
 void DrawEnemy(int);
 void DrawEnemyArr(Enemy**, int);
-//체력 출력
 void DisplayEnemyHealth(Enemy*);
 
 void DrawEnemyDamage(int, int);
 
 void DrawEnemyPatternStr(Enemy*);
 
-//void Enemy_Attack(Enemy*, Player*);
 void Enemy_Defense(Enemy*);
 void Enemy_Hit(Enemy*, int);
 void Enemy_Die(Enemy*);
@@ -132,11 +127,7 @@ Enemy** SpawnEnemy(Stage* round)
 		int seed = rand();
 		enemyArr[i] = InitEnemy(round, seed);
 		enemyArr[i]->EnemyNo = i;
-		/*CreateEnemySpriteArr();
-		DrawEnemy(enemyArr[i]->EnemyNo);
-
-		DisplayEnemyName(enemyArr[i]);
-		DisplayEnemyHealth(enemyArr[i]);*/
+		
 	}
 	return enemyArr;
 }
@@ -158,7 +149,6 @@ void DrawEnemyArr(Enemy** enemyArr, int length)
 
 void DestroyEnemyArr(Enemy** enemyArr, int enemyCnt)
 {
-	//int length = sizeof(*enemyArr) / sizeof(enemyArr[0]);
 	for (int i = 0; i < enemyCnt; i++)
 	{
 		free(enemyArr[i]);
@@ -166,12 +156,7 @@ void DestroyEnemyArr(Enemy** enemyArr, int enemyCnt)
 	free(enemyArr);
 	ClearUI();
 }
-//void Enemy_Attack(Enemy* enemy, Player* player)
-//{
-//	int eDmg = (int)((float)enemy->Attack * enemy->AttackDmgMultiplier);
-//	if (eDmg > 0)
-//		Player_Hit(player, eDmg);
-//}
+
 
 void Enemy_Defense(Enemy* enemy)
 {
@@ -193,19 +178,16 @@ void Enemy_Hit(Enemy* enemy, int Dmg)
 		if (eDmg < enemy->CurrHP)
 		{
 			enemy->CurrHP -= eDmg;
-			//sprintf(Statement, "%s가 %d만큼의 피해를 입었습니다.", enemy->Name, Dmg);
 		}
 		else
 		{
-			//sprintf(Statement, "%s가 죽었습니다.", enemy->Name);
 			DrawEnemyDamage(Dmg, enemy->EnemyNo);
 			enemy->CurrHP = 0;
 			enemy->isAlive = 0;
 		}
 	}
 
-	//피 0되면 죽는 로직
-//printf("출력문 전달 완료\n");
+	
 
 }
 
@@ -249,7 +231,6 @@ void DisplayEnemyName(Enemy* enemy)
 
 void SetRandomEnemyName(Enemy* enemy, int seed)
 {
-	//srand(time(NULL));
 	FILE* fp = fopen("PurgatoryMobNameList.txt", "r");
 	int length = getLine(fp);
 	int random = seed % length;
@@ -285,14 +266,7 @@ void DisplayEnemyHealth(Enemy* enemy)
 		idx = 0;
 
 	char HealthLetter[20] = "";
-	/*char CurrHPLetter[4] = "";
-	sprintf(CurrHPLetter, "%d", enemy->CurrHP);
-	char MaxHPLetter[4] = "";
-	sprintf(MaxHPLetter, "%d", enemy->MaxHP);
-
-	strcat(HealthLetter, CurrHPLetter);
-	strcat(HealthLetter, " / ");
-	strcat(HealthLetter, MaxHPLetter);*/
+	
 	if (enemy->Armour > 0)
 	{
 		sprintf(HealthLetter, "%d+(%d) / %d", enemy->CurrHP, enemy->Armour, enemy->MaxHP);

@@ -88,68 +88,68 @@ void SetReward(Reward* reward)
 	{
 	case 0:
 		reward->Rank = NORMAL;
-		strcpy(reward->Name, "¼ýµ¹");
-		strcpy(reward->Discription, "°ø°Ý·Â + 1");
+		strcpy(reward->Name, "ìˆ«ëŒ");
+		strcpy(reward->Discription, "ê³µê²©ë ¥ + 1");
 		break;
 	case 1:
 		reward->Rank = NORMAL;
-		strcpy(reward->Name, "µÎ²¨¿î ¹æÆÐ");
-		strcpy(reward->Discription, "¹æ¾î·Â + 1");		
+		strcpy(reward->Name, "ë‘êº¼ìš´ ë°©íŒ¨");
+		strcpy(reward->Discription, "ë°©ì–´ë ¥ + 1");		
 		break;
 	case 2:
 		reward->Rank = HARD;
-		strcpy(reward->Name, "°ú°ÝÇÑ °ø°Ý");
-		strcpy(reward->Discription, "°ø°Ý·Â + 2 ¹æ¾î·Â - 1");
+		strcpy(reward->Name, "ê³¼ê²©í•œ ê³µê²©");
+		strcpy(reward->Discription, "ê³µê²©ë ¥ + 2 ë°©ì–´ë ¥ - 1");
 		break;
 	case 3:
 		reward->Rank = HARD;
-		strcpy(reward->Name, "³­ÆøÇÑ °ø°Ý");
-		strcpy(reward->Discription, "°ø°Ý·Â + 3 ¹æ¾î·Â - 2");
+		strcpy(reward->Name, "ë‚œí­í•œ ê³µê²©");
+		strcpy(reward->Discription, "ê³µê²©ë ¥ + 3 ë°©ì–´ë ¥ - 2");
 		break;
 	case 4:
 		reward->Rank = HARD;
-		strcpy(reward->Name, "¹æÆÐº´ÀÇ ºñ¾Ö");
-		strcpy(reward->Discription, "¹æ¾î·Â + 2 °ø°Ý·Â - 1");
+		strcpy(reward->Name, "ë°©íŒ¨ë³‘ì˜ ë¹„ì• ");
+		strcpy(reward->Discription, "ë°©ì–´ë ¥ + 2 ê³µê²©ë ¥ - 1");
 		break;
 	case 5:
 		reward->Rank = RANDOM;
-		strcpy(reward->Name, "¾Æ±Í");
-		strcpy(reward->Discription, "°ø°Ý·Â°ú ¹æ¾î·ÂÀÌ ·£´ýÇÏ°Ô -1 ~ +1");
+		strcpy(reward->Name, "ì•„ê·€");
+		strcpy(reward->Discription, "ê³µê²©ë ¥ê³¼ ë°©ì–´ë ¥ì´ ëžœë¤í•˜ê²Œ ë³€í™” -1 ~ +1");
 		break;
 	case 6:
 		reward->Rank = RANDOM;
-		strcpy(reward->Name, "Â¦±Í");
-		strcpy(reward->Discription, "°ø°Ý·Â°ú ¹æ¾î·ÂÀÌ ·£´ýÇÏ°Ô -2 ~ +2");
+		strcpy(reward->Name, "ì§ê·€");
+		strcpy(reward->Discription, "ê³µê²©ë ¥ê³¼ ë°©ì–´ë ¥ì´ ëžœë¤í•˜ê²Œ ë³€í™” -2 ~ +2");
 		break;
 	case 7:
 		reward->Rank = RANDOM;
-		strcpy(reward->Name, "¸¶±Í");
-		strcpy(reward->Discription, "°ø°Ý·Â°ú ¹æ¾î·ÂÀÌ ·£´ýÇÏ°Ô -3 ~ +3");
+		strcpy(reward->Name, "ë§ˆê·€");
+		strcpy(reward->Discription, "ê³µê²©ë ¥ê³¼ ë°©ì–´ë ¥ì´ ëžœë¤í•˜ê²Œ ë³€í™” -3 ~ +3");
 		break;
 	case 8:
 		reward->Rank = UNIQUE;
-		strcpy(reward->Name, "»ç¹«¶óÀÌ");
-		strcpy(reward->Discription, "°ø°Ý·Â + 4 Àý´ÜÀ» »ç¿ëÇÒ ¼ö ¾øÀ½");
+		strcpy(reward->Name, "ì‚¬ë¬´ë¼ì´");
+		strcpy(reward->Discription, "ê³µê²©ë ¥ + 4 ì ˆë‹¨ì„ ì‚¬ìš©í•  ìˆ˜ ì—†ìŒ");
 		break;
 	case 9:
 		reward->Rank = UNIQUE;
-		strcpy(reward->Name, "±âº»±â ¼÷·Ã");
-		strcpy(reward->Discription, "°ø°Ý·Â + 2 ½ºÅ³À» »ç¿ëÇÒ ¼ö ¾øÀ½");
+		strcpy(reward->Name, "ê¸°ë³¸ê¸° ìˆ™ë ¨");
+		strcpy(reward->Discription, "ê³µê²©ë ¥ + 2 ìŠ¤í‚¬ì„ ì‚¬ìš©í•  ìˆ˜ ì—†ìŒ");
 		break;
 	case 10:
 		reward->Rank = UNIQUE;
-		strcpy(reward->Name, "±¤Àü»ç");
-		strcpy(reward->Discription, "¿¡³ÊÁö + 2 ¼öºñ¸¦ »ç¿ëÇÒ ¼ö ¾øÀ½");
+		strcpy(reward->Name, "ê´‘ì „ì‚¬");
+		strcpy(reward->Discription, "ì—ë„ˆì§€ + 2 ë°©ì–´í•  ìˆ˜ ì—†ìŒ");
 		break;
 	case 11:
 		reward->Rank = UNIQUE;
-		strcpy(reward->Name, "³¯·ÆÇÑ °Ë°´");
-		strcpy(reward->Discription, "°ø°Ý·Â + 4 Àý´ÜÀ» »ç¿ëÇÒ ¼ö ¾øÀ½");
+		strcpy(reward->Name, "ë‚ ë µí•œ ê²€ê°");
+		strcpy(reward->Discription, "ì—ë„ˆì§€ + 1 ì ˆë‹¨ì„ ì‚¬ìš©í•  ìˆ˜ ì—†ìŒ");
 		break;
 	case 12:
 		reward->Rank = UNIQUE;
-		strcpy(reward->Name, "Ç³¼ºÇÑ ½ÄÅ¹");
-		strcpy(reward->Discription, "¾ÕÀ¸·Î ¹Þ´Â º¸»óÀÇ ¼±ÅÃÁö + 1");
+		strcpy(reward->Name, "í’ì„±í•œ ì‹íƒ");
+		strcpy(reward->Discription, "ì•žìœ¼ë¡œ ë°›ëŠ” ë³´ìƒì˜ ì„ íƒì§€ + 1");
 		break;
 	}
 }

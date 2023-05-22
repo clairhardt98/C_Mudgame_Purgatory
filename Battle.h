@@ -21,7 +21,6 @@ void EnemyCrush(Enemy*, Player*);
 
 void PlayerMeleeAttack(Player* player, Enemy* enemy)
 {
-	//printf("¿¡³ÊÁö : %d, ÇÊ¿ä ¿¡³ÊÁö : %d\n", player->Energy, player->MeleeAttackEnergyNeeded);
 	if (player->Energy >= player->MeleeAttackEnergyNeeded)
 	{
 		int Dmg = (int)((float)player->Attack * player->AttackDmgMultiplier);
@@ -31,10 +30,8 @@ void PlayerMeleeAttack(Player* player, Enemy* enemy)
 	}
 	else
 	{
-		//¿¡³ÊÁö ¾øÀ»¶§ ´ÜÀÏ°ø°Ý¸í·É ³»·ÈÀ» ¶§ ·ÎÁ÷
 	}
 
-	//°ø°Ý ¾Ö´Ï¸ÞÀÌ¼Ç Ãâ·Â ·ÎÁ÷
 
 }
 
@@ -56,10 +53,10 @@ bool PlayerRangeAttack(Player* player, Enemy** enemyArr, int enemyCnt)
 	}
 	else
 	{
-		sprintf(Statement, "¿¡³ÊÁö°¡ ºÎÁ·ÇÕ´Ï´Ù!");
+		sprintf(Statement, "ì—ë„ˆì§€ê°€ ë¶€ì¡±í•©ë‹ˆë‹¤!");
 		return 0;
 	}
-	//±¤¿ª°ø°Ý ¾Ö´Ï¸ÞÀÌ¼Ç Ãâ·Â ·ÎÁ÷
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 }
 
 void EnemyAttack(Enemy* enemy, Player* player)
@@ -162,14 +159,12 @@ void DrawEnemyAction(Enemy* enemy)
 	case ENEMYDEFENSE:
 	{
 		sprintf(enemy->NextPatternStr, "@%d", enemy->Defense);
-		//Àû ¹æ¾î ÇÔ¼ö
 		break;
 	}
 
 	case ENEMYWEAKEN:
 	{
 		sprintf(enemy->NextPatternStr, "#%d", enemy->WeakenDuration);
-		//¾àÈ­ ÇÔ¼ö
 		break;
 	}
 
@@ -188,33 +183,32 @@ void EnemyAction(Player* player, Enemy* enemy)
 	{
 	case ENEMYATTACK:
 	{
-		sprintf(Statement, "»ó´ë %d. %sÀÇ °ø°Ý!", enemy->EnemyNo + 1, enemy->Name);
+		sprintf(Statement, "ì  %d. %sì˜ ê³µê²©!", enemy->EnemyNo + 1, enemy->Name);
 		EnemyAttack(enemy, player);
 		break;
 	}
 
 	case ENEMYDEFENSE:
 	{
-		sprintf(Statement, "»ó´ë %d. %sÀÇ ¹æ¾î!", enemy->EnemyNo + 1, enemy->Name);
+		sprintf(Statement, "ì  %d. %sì˜ ìˆ˜ë¹„!", enemy->EnemyNo + 1, enemy->Name);
 		Enemy_Defense(enemy);
 		break;
 	}
 
 	case ENEMYWEAKEN:
 	{
-		sprintf(Statement, "»ó´ë %d. %sÀÇ ¾àÈ­!", enemy->EnemyNo + 1, enemy->Name);
+		sprintf(Statement, "ì  %d. %sì˜ ì•½í™”", enemy->EnemyNo + 1, enemy->Name);
 		EnemyWeaken(enemy, player);
 		break;
 	}
 
 	case ENEMYCRUSH:
 	{
-		sprintf(Statement, "»ó´ë %d. %sÀÇ ÆÄ¼â!", enemy->EnemyNo + 1, enemy->Name);
+		sprintf(Statement, "ì  %d. %sì˜ íŒŒì‡„!", enemy->EnemyNo + 1, enemy->Name);
 		EnemyCrush(enemy, player);
 		break;
 	}
 
 	}
-	//È®·ü -> °ø°Ý 50, ¼öºñ 20, ¾àÈ­ 20, °ø°Ý ¹× ¾àÈ­ 10
-	//0~9¸¦ rand·Î »Ì´Â´Ù ->0 : °ø°Ý ¹× ¾àÈ­, 1~2 : ¾àÈ­, 3~4 : ¼öºñ 5~9 : °ø°Ý
+	
 }

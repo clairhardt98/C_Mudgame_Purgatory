@@ -56,8 +56,7 @@ typedef struct
 Player* InitPlayer();
 void DestroyPlayer(Player*);
 
-//void Player_MeleeAttack(Player*, Enemy*);
-//void Player_RangeAttack(Player*, Enemy**);
+
 void Player_Defense(Player*);
 void Player_Hit(Player*, int);
 void Player_Die(Player*);
@@ -72,7 +71,7 @@ void DrawPlayerEnergy(Player*);
 Player* InitPlayer()
 {
 	CreatePlayerSpriteArr();
-	//DrawPlayer();
+
 
 	Player* player = (Player*)malloc(sizeof(Player));
 
@@ -114,43 +113,7 @@ void DestroyPlayer(Player* player)
 	free(player);
 }
 
-//void Player_MeleeAttack(Player* player, Enemy* enemy)
-//{
-//	if (player->Energy >= player->MeleeAttackEnergyNeeded)
-//	{
-//		int Dmg = (int)((float)player->Attack * player->AttackDmgMultiplier);
-//		if (Dmg > 0)
-//			Enemy_Hit(enemy, Dmg);
-//		player->Energy -= player->MeleeAttackEnergyNeeded;
-//	}
-//	else
-//	{
-//		//¿¡³ÊÁö ¾øÀ»¶§ ´ÜÀÏ°ø°Ý¸í·É ³»·ÈÀ» ¶§ ·ÎÁ÷
-//	}
-//
-//	//°ø°Ý ¾Ö´Ï¸ÞÀÌ¼Ç Ãâ·Â ·ÎÁ÷
-//}
-//
-//void Player_RangeAttack(Player* player, Enemy** enemy)
-//{
-//	if (player->Energy >= player->MeleeAttackEnergyNeeded)
-//	{
-//		int Dmg = (int)((float)player->Attack * player->AttackDmgMultiplier);
-//		if (Dmg > 0)
-//		{
-//			for (int i = 0; i < MAXENEMY; i++)
-//			{
-//				Enemy_Hit(enemy[i], Dmg);
-//			}
-//		}
-//		player->Energy -= player->RangeAttackEnergyNeeded;
-//	}
-//	else
-//	{
-//		//¿¡³ÊÁö ¾øÀ» ¶§ ±¤¿ª°ø°Ý¸í·É ³»·ÈÀ» ¶§ ·ÎÁ÷
-//	}
-//	//±¤¿ª°ø°Ý ¾Ö´Ï¸ÞÀÌ¼Ç Ãâ·Â ·ÎÁ÷
-//}
+
 
 void Player_Defense(Player* player)
 {
@@ -159,13 +122,12 @@ void Player_Defense(Player* player)
 		int tempArmour = (int)(player->Defense * player->ArmourMultiplier);
 		player->Armour += tempArmour;
 		player->Energy -= player->DefenseEnergyNeeded;
-		sprintf(Statement, "ÀÌ¹ø ÅÏ ¹æ¾îµµ°¡ %d Áõ°¡ÇÕ´Ï´Ù.", tempArmour);
+		sprintf(Statement, "ì´ë²ˆ í„´ ë°©ì–´ë„ê°€ %d ì¦ê°€í•©ë‹ˆë‹¤.", tempArmour);
 	}
 }
 
 void Player_Hit(Player* player, int Dmg)
 {
-	//int eDmg = (int)((float)player->Armour - (float)Dmg * player->HitDmgMultiplier);
 	int eDmg = player->Armour - Dmg;
 	if (eDmg < 0)
 	{
@@ -180,7 +142,7 @@ void Player_Hit(Player* player, int Dmg)
 
 void Player_Die(Player* player)
 {
-	//»ç¸Á ½Ã ·ÎÁ÷
+	//í”Œë ˆì´ì–´ ì‚¬ë§ ì‹œ ë¡œì§
 }
 
 void CreatePlayerSpriteArr()
@@ -206,7 +168,6 @@ void CreatePlayerSpriteArr()
 
 void DrawPlayer()
 {
-	//CreatePlayerSpriteArr();
 	int PlayerSpriteStartPosI = 22;
 	int PlayerSpriteStartPosJ = 1;
 
@@ -237,7 +198,7 @@ void DrawPlayerDebuff(Player* player)
 	if (player->IsWeakened)
 	{
 		char PlayerDebuffStr[20];
-		sprintf(PlayerDebuffStr, "¾àÈ­ : %d", player->RemainedWeakness);
+		sprintf(PlayerDebuffStr, "ï¿½ï¿½È­ : %d", player->RemainedWeakness);
 		DrawSentenceCenterAlign(PlayerDebuffStr, strlen(PlayerDebuffStr), PLAYER_DEBUFF_POS_I, PLAYER_DEBUFF_POS_J);
 	}
 	else
