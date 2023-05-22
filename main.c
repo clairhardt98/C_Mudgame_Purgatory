@@ -39,7 +39,6 @@ enum PlayerActionEnum
 
 int main()
 {
-	int Selection;
 	ClearUI();
 	Intro();
 
@@ -367,8 +366,6 @@ void RewardStage(Player* player)
 {
 	srand(time(NULL));
 	Reward** rewardArr = (Reward**)malloc(RewardNum * sizeof(Reward*));
-	
-	int rewardNoArr[10];
 
 	for (int i = 0; i < RewardNum; i++)
 	{

@@ -122,17 +122,17 @@ void ConfigStage(Stage** stageArr)
 	stageArr[8]->ToCreateMonsterNum = 1;
 	stageArr[8]->HPRandomVar = 2;
 	stageArr[8]->MaxHP = 18;
-	stageArr[8]->Attack = 5;
-	stageArr[8]->Defense = 3;
+	stageArr[8]->Attack = 8;
+	stageArr[8]->Defense = 5;
 	stageArr[8]->WeakenDuration = 2;
 
  	stageArr[9]->StageCnt = 1;
-	stageArr[9]->RoundCnt = 19;
+	stageArr[9]->RoundCnt = 10;
 	stageArr[9]->ToCreateMonsterNum = 1;
 	stageArr[9]->HPRandomVar = 9;
 	stageArr[9]->MaxHP = 199;
-	stageArr[9]->Attack = 8;
-	stageArr[9]->Defense = 3;
+	stageArr[9]->Attack = 10;
+	stageArr[9]->Defense = 7;
 	stageArr[9]->WeakenDuration = 3;
 
 }
