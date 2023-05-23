@@ -117,7 +117,7 @@ void Player_Defense(Player* player)
 		int tempArmour = (int)(player->Defense * player->ArmourMultiplier);
 		player->Armour += tempArmour;
 		player->Energy -= player->DefenseEnergyNeeded;
-		sprintf(Statement, "Gain %d Armour This Turn", tempArmour);
+		sprintf(Statement, "¿Ãπ¯ ≈œø° πÊæÓµµ %d »πµÊ", tempArmour);
 	}
 }
 
@@ -145,9 +145,7 @@ void Player_Hit(Player* player, int Dmg)
 
 void Player_Die(Player* player)
 {
-	//ÌîåÎ†àÏù¥Ïñ¥ ÏÇ¨Îßù Ïãú Î°úÏßÅ
-	//ÏÇ¨Îßù Î¨∏Íµ¨ Ï∂úÎ†•
-	//Ïä§ÌÖåÏù¥ÏßÄ Ïñ¥Î†àÏù¥Îûë ÌîåÎ†àÏù¥Ïñ¥ Ìï†Îãπ Ìï¥Ï†úÌõÑ Ï¢ÖÎ£å
+
 }
 
 void CreatePlayerSpriteArr()
@@ -203,7 +201,7 @@ void DrawPlayerDebuff(Player* player)
 	if (player->IsWeakened)
 	{
 		char PlayerDebuffStr[20];
-		sprintf(PlayerDebuffStr, "Weaken : %d", player->RemainedWeakness);
+		sprintf(PlayerDebuffStr, "æ‡»≠ : %d", player->RemainedWeakness);
 		DrawSentenceCenterAlign(PlayerDebuffStr, strlen(PlayerDebuffStr), PLAYER_DEBUFF_POS_I, PLAYER_DEBUFF_POS_J);
 	}
 	else
@@ -226,9 +224,9 @@ void DrawPlayerStatus(Player* player)
 	
 
 	sprintf(PlayerHPStr, "HP : %d / %d", player->CurrHP, player->MaxHP);
-	sprintf(PlayerAttackStr, "Attack : %d", player->Attack);
-	sprintf(PlayerDefenseStr, "Defense : %d", player->Defense);
-	sprintf(PlayerEnergyStr, "Energy : %d / %d", player->Energy, player->MaxEnergy);
+	sprintf(PlayerAttackStr, "∞¯∞›∑¬ : %d", player->Attack);
+	sprintf(PlayerDefenseStr, "ºˆ∫Ò∑¬ : %d", player->Defense);
+	sprintf(PlayerEnergyStr, "ø°≥ ¡ˆ : %d / %d", player->Energy, player->MaxEnergy);
 	DrawSentenceLeftAlign(PlayerHPStr, strlen(PlayerHPStr), startposi, startposj); startposi += 2;
 	DrawSentenceLeftAlign(PlayerAttackStr, strlen(PlayerAttackStr), startposi, startposj); startposi += 2;
 	DrawSentenceLeftAlign(PlayerDefenseStr, strlen(PlayerDefenseStr), startposi, startposj); startposi += 2;
@@ -236,23 +234,23 @@ void DrawPlayerStatus(Player* player)
 
 	if (!player->CanUseRange)
 	{
-		char PlayerCannotUseRangeStr[20] = "Cannot Use Range";
+		char PlayerCannotUseRangeStr[40] = "¿˝¥‹¿ª ªÁøÎ«“ ºˆ æ¯¿Ω";
 		DrawSentenceLeftAlign(PlayerCannotUseRangeStr, strlen(PlayerCannotUseRangeStr), startposi, startposj); startposi += 2;
 	}
 	if (!player->CanUseSkill)
 	{
-		char PlayerCannotUseSkillStr[20] = "Cannot Use Skill";
+		char PlayerCannotUseSkillStr[40] = "Ω∫≈≥¿ª ªÁøÎ«“ ºˆ æ¯¿Ω";
 		DrawSentenceLeftAlign(PlayerCannotUseSkillStr, strlen(PlayerCannotUseSkillStr), startposi, startposj); startposi += 2;
 	}
 	if (player->IsWeakened)
 	{
-		char PlayerDebuffStr[20];
-		sprintf(PlayerDebuffStr, "Debuff : Weaken");
+		char PlayerDebuffStr[40];
+		sprintf(PlayerDebuffStr, "µπˆ«¡ : æ‡»≠");
 		DrawSentenceLeftAlign(PlayerDebuffStr, strlen(PlayerDebuffStr), startposi, startposj); startposi += 2;
 	}
 	if (!player->HasSkill)
 	{
-		char PlayerHasSkillStr[20] = "Dont Have Skill";
+		char PlayerHasSkillStr[40] = "Ω∫≈≥ πÃ∫∏¿Ø";
 		DrawSentenceLeftAlign(PlayerHasSkillStr, strlen(PlayerHasSkillStr), startposi, startposj); startposi += 2;
 	}
 	else
@@ -261,7 +259,7 @@ void DrawPlayerStatus(Player* player)
 	}
 	if (player->HasUniqueReward)
 	{
-		char PlayerHasUniqueRewardStr[20] = "Has Unique Reward";
+		char PlayerHasUniqueRewardStr[24] = "¿Ø¥œ≈© ∫∏ªÛ ∫∏¿Ø";
 		DrawSentenceLeftAlign(PlayerHasUniqueRewardStr, strlen(PlayerHasUniqueRewardStr), startposi, startposj); startposi += 2;
 	}
 }

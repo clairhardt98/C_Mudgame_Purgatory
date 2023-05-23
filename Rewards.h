@@ -85,89 +85,89 @@ void SetReward(Reward* reward)
 	{
 	case 0:
 		reward->Rank = NORMAL;
-		strcpy(reward->Name, "Whetstone");
-		strcpy(reward->Discription, "Attack + 1");
+		strcpy(reward->Name, "숫돌");
+		strcpy(reward->Discription, "공격력 + 1");
 		strcpy(reward->RankStr, "NORMAL");
 		break;
 	case 1:
 		reward->Rank = NORMAL;
-		strcpy(reward->Name, "Thick Shield");
-		strcpy(reward->Discription, "Defense + 1");		
+		strcpy(reward->Name, "두꺼운 방패");
+		strcpy(reward->Discription, "방어력 + 1");		
 		strcpy(reward->RankStr, "NORMAL");
 		break;
 	case 2:
 		reward->Rank = HARD;
-		strcpy(reward->Name, "Wild Attack");
-		strcpy(reward->Discription, "Attack + 2 Defense - 1");
+		strcpy(reward->Name, "사나운 타격");
+		strcpy(reward->Discription, "공격력 + 2 방어력 - 1");
 		strcpy(reward->RankStr, "HARD");
 		break;
 	case 3:
 		reward->Rank = HARD;
-		strcpy(reward->Name, "Violent Attack");
-		strcpy(reward->Discription, "Attack + 3 Defense - 2");
+		strcpy(reward->Name, "난폭한 타격");
+		strcpy(reward->Discription, "공격력 + 3 수비력 - 2");
 		strcpy(reward->RankStr, "HARD");
 
 		break;
 	case 4:
 		reward->Rank = HARD;
-		strcpy(reward->Name, "Sorrow of Shielder");
-		strcpy(reward->Discription, "Defense + 2 Attack - 1");
+		strcpy(reward->Name, "방패병의 비애");
+		strcpy(reward->Discription, "방어력 + 2 수비력 - 1");
 		strcpy(reward->RankStr, "HARD");
 
 		break;
 	case 5:
 		reward->Rank = RANDOM;
-		strcpy(reward->Name, "The MonkFish");
-		strcpy(reward->Discription, "Random Change in Attack and Defense -1 ~ +1");
+		strcpy(reward->Name, "아귀");
+		strcpy(reward->Discription, "공격력과 방어력이 랜덤하게 변화 : -1 ~ +1");
 		strcpy(reward->RankStr, "RANDOM");
 
 		break;
 	case 6:
 		reward->Rank = RANDOM;
-		strcpy(reward->Name, "The Eneven Ears");
-		strcpy(reward->Discription, "Random Change in Attack and Defense -2 ~ +2");
+		strcpy(reward->Name, "짝귀");
+		strcpy(reward->Discription, "공격력과 방어력이 랜덤하게 변화 : -2 ~ +2");
 		strcpy(reward->RankStr, "RANDOM");
 
 		break;
 	case 7:
 		reward->Rank = RANDOM;
-		strcpy(reward->Name, "The Devil");
-		strcpy(reward->Discription, "Random Change in Attack and Defense -3 ~ +3");
+		strcpy(reward->Name, "마귀");
+		strcpy(reward->Discription, "공격력과 방어력이 랜덤하게 변화 : -3 ~ +3");
 		strcpy(reward->RankStr, "RANDOM");
 
 		break;
 	case 8:
 		reward->Rank = UNIQUE;
-		strcpy(reward->Name, "The Samurai");
+		strcpy(reward->Name, "사무라이");
 		strcpy(reward->Discription, "Attack + 4 Cannot Use Range");
 		strcpy(reward->RankStr, "UNIQUE");
 
 		break;
 	case 9:
 		reward->Rank = UNIQUE;
-		strcpy(reward->Name, "Skilled Basics");
+		strcpy(reward->Name, "기본기 숙련");
 		strcpy(reward->Discription, "Attack + 2 Cannot Use Skill");
 		strcpy(reward->RankStr, "UNIQUE");
 
 		break;
 	case 10:
 		reward->Rank = UNIQUE;
-		strcpy(reward->Name, "Berserker");
-		strcpy(reward->Discription, "Energy + 2 Cannot Use Defense");
+		strcpy(reward->Name, "광전사");
+		strcpy(reward->Discription, "에너지 + 2 Cannot Use Defense");
 		strcpy(reward->RankStr, "UNIQUE");
 
 		break;
 	case 11:
 		reward->Rank = UNIQUE;
-		strcpy(reward->Name, "Deft Swordman");
-		strcpy(reward->Discription, "Energy + 1 Cannot Use Range");
+		strcpy(reward->Name, "날렵한 검객");
+		strcpy(reward->Discription, "에너지 + 1 Cannot Use Range");
 		strcpy(reward->RankStr, "UNIQUE");
 
 		break;
 	case 12:
 		reward->Rank = UNIQUE;
-		strcpy(reward->Name, "A Plentiful Dish");
-		strcpy(reward->Discription, "Number Of Future Choice of Rewards + 1");
+		strcpy(reward->Name, "풍성한 식탁");
+		strcpy(reward->Discription, "앞으로 받을 보상의 선택지 + 1");
 		strcpy(reward->RankStr, "UNIQUE");
 
 		break;

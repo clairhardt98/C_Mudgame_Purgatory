@@ -58,12 +58,10 @@ void PrintScreen()
 
 void ClearUI()
 {
-	//printf("%p", &ScreenArray[10][10]);
 	for (int i = 0; i < UIROW; i++)
 	{
 		for (int j = 0; j < UICOL; j++)
 		{
-			//ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ + ï¿½ï¿½ï¿½
 			if ((i == 0 && j == 0) || (i == 0 && j == UICOL - 1) || (i == UIROW - 1 && j == 0) || (i == UIROW - 1 && j == UICOL - 1))
 				ScreenArray[i][j] = '+';
 
@@ -179,14 +177,14 @@ void DrawUI()
 
 void DrawMenuSentence()
 {
-	char MeleeAttackStr[20] = "1. Melee(1)";
-	char RangeAttackStr[20] = "2. Range(2)";
-	char DefenseStr[20] = "3. Defense(1)";
+	char MeleeAttackStr[20] = "1. Å¸°Ý (1)";
+	char RangeAttackStr[20] = "2. Àý´Ü (2)";
+	char DefenseStr[20] = "3. ¼öºñ (1)";
 	char SkillStr[20] = "4. ???";
-	char PlayerInfoStr[20] = "5. My info";
-	char EnemyInfoStr[20] = "6. Foe Info";
-	char GameInfoStr[20] = "7. Help";
-	char SaveQuitStr[20] = "8. Quit";
+	char PlayerInfoStr[20] = "5. ³» Á¤º¸";
+	char EnemyInfoStr[20] = "6. Àû Á¤º¸";
+	char GameInfoStr[20] = "7. µµ¿ò¸»";
+	char SaveQuitStr[20] = "8. Á¾·á";
 
 	DrawSentenceLeftAlign(MeleeAttackStr, strlen(MeleeAttackStr), MENU_BOX_STARTPOS_I + 3, MENU_BOX_STARTPOS_J + 5);
 	DrawSentenceLeftAlign(RangeAttackStr, strlen(RangeAttackStr), MENU_BOX_STARTPOS_I + 3, MENU_BOX_STARTPOS_J + MENU_BOX_WIDTH / 4 + 4);

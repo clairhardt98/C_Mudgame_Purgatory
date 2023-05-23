@@ -327,22 +327,22 @@ void DrawEnemyStatus(Enemy* enemy)
 
 	char EnemyAttackStr[10];
 	char EnemyDefenseStr[10];
-	char NextPattern[20] = "Next Pattern";
+	char NextPattern[20] = "다음 패턴";
 	char tempPattern[10];
 	
 	switch (enemy->NextPattern)
 	{
 	case ENEMYATTACK:
-		strcpy(tempPattern, "-> Attack");
+		strcpy(tempPattern, "-> 공격");
 		break;
 	case ENEMYDEFENSE:
-		strcpy(tempPattern, "-> Defense");
+		strcpy(tempPattern, "-> 수비");
 		break;
 	case ENEMYWEAKEN:
-		strcpy(tempPattern, "-> Weaken");
+		strcpy(tempPattern, "-> 약화");
 		break;
 	case ENEMYCRUSH:
-		strcpy(tempPattern, "-> Crush");
+		strcpy(tempPattern, "-> 파쇄");
 		break;
 	}
 

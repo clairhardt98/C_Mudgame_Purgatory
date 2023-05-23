@@ -42,9 +42,9 @@ int main()
 	ClearUI();
 	Intro();
 
-	//í”Œë ˆì´ì–´ ìƒì„±
+	//ÇÃ·¹ÀÌ¾î »ı¼º
 	Player* player = InitPlayer();
-	//ìŠ¤í…Œì´ì§€ ìƒì„±
+	//½ºÅ×ÀÌÁö »ı¼º
 	Stage** stageArr = InitStageArr();
 	
 
@@ -65,32 +65,35 @@ int main()
 		while (1)
 		{
 			
-			//ìŠ¤í…Œì´ì§€ ì‹œì‘ ì•ˆë‚´ ì¶œë ¥
+			//½ºÅ×ÀÌÁö ½ÃÀÛ ¾È³» Ãâ·Â
 			int seed = rand();
 
 			PrepareEnemyArr(enemyArr, enemyCnt);
-			RenewScreen(player, enemyArr, enemyCnt);
+			//RenewScreen(player, enemyArr, enemyCnt);
 
-			//í”Œë ˆì´ì–´ì˜ í„´
+			//ÇÃ·¹ÀÌ¾îÀÇ ÅÏ
 			while (player->Energy > 0 && !StageClearFlag)
 			{
+				
 				if (player->MaxEnergy == player->Energy)
 				{
-					sprintf(Statement, "My Turn!");
-					RenewScreen(player, enemyArr, enemyCnt);
+					sprintf(Statement, " ³ªÀÇ ÅÏ!");
+					//RenewScreen(player, enemyArr, enemyCnt);
 				}
 				int Selection;
 
-				while (1)//ì˜ëª»ëœ ì…ë ¥ ê²€ì¶œ ë¡œì§
+				RenewScreen(player, enemyArr, enemyCnt);
+				while (1)//Àß¸øµÈ ÀÔ·Â °ËÃâ ·ÎÁ÷
 				{
-					printf("What should I do?\n>> ");
+					
+					printf("¹«¾ùÀ» ÇÒ±î?\n>> ");
 					scanf("%d", &Selection);
 					if (Selection == 99)
 					{
 						RoundIdx = 9;
 						StageClearFlag = true;
 					}
-					//í”Œë ˆì´ì–´ ë¡œì§
+					//ÇÃ·¹ÀÌ¾î ·ÎÁ÷
 					if (PlayerAction(Selection, player, enemyArr, enemyCnt))
 						break;
 					else
@@ -108,20 +111,20 @@ int main()
 			}
 			OnPlayerTurnEnd(player, enemyArr, enemyCnt);
 			Sleep(2000);
-			sprintf(Statement, "Enemy Turn!");
+			sprintf(Statement, " »ó´ëÀÇ ÅÏ!");
 			RenewScreen(player, enemyArr, enemyCnt);
 			Sleep(2000);
-			//ìƒëŒ€ì˜ í„´
+			//»ó´ëÀÇ ÅÏ
 			for (int i = 0; i < enemyCnt; i++)
 			{
 				if (enemyArr[i]->isAlive)
 				{
 					//enemy task
-					//sprintf(Statement, "ìƒëŒ€ %sì˜ í–‰ë™", enemyArr[i]->Name);
+					//sprintf(Statement, "»ó´ë %sÀÇ Çàµ¿", enemyArr[i]->Name);
 					EnemyAction(player, enemyArr[i]);
 					RenewScreen(player, enemyArr, enemyCnt);
 					Sleep(2000);
-					//í”Œë ˆì´ì–´ ì‚¬ë§ ì²´í¬
+					//ÇÃ·¹ÀÌ¾î »ç¸Á Ã¼Å©
 					if (player->CurrHP == 0)
 					{
 						OnPlayerDeath(player, stageArr);
@@ -149,7 +152,7 @@ int main()
 	}
 	//exit stage
 	//set stage pointer to next stage
-	//ê²Œì„ ì—”ë”©(ë¼ìš´ë“œ 10 í´ë¦¬ì–´)
+	//°ÔÀÓ ¿£µù(¶ó¿îµå 10 Å¬¸®¾î)
 	OnClearGame(player, stageArr);
 
 }
@@ -160,7 +163,7 @@ void RenewScreen(Player* player, Enemy** enemyArr, int enemyCnt)
 	ClearUI();
 	DrawUI();
 	DrawRoundStr(RoundIdx + 1);
-	//í„´ í‘œì‹œ
+	//ÅÏ Ç¥½Ã
 	DrawPlayer();
 	DrawPlayerHP(player);
 	DrawPlayerEnergy(player);
@@ -183,7 +186,7 @@ void PrintEffect(int sel, int target)
 	{
 	case MELEE:
 	{
-		char tempEffectStatement[10] = "Melee!";
+		char tempEffectStatement[10] = "Å¸°İ!";
 		ClearStatement();
 		DrawSentenceCenterAlign(tempEffectStatement, strlen(tempEffectStatement),
 			STATEMENT_DRAW_POS_I, STATEMENT_DRAW_POS_J);
@@ -192,7 +195,7 @@ void PrintEffect(int sel, int target)
 	}
 	case RANGE:
 	{
-		char tempEffectStatement[10] = "Range!";
+		char tempEffectStatement[10] = "Àı´Ü!";
 		ClearStatement();
 		DrawSentenceCenterAlign(tempEffectStatement, strlen(tempEffectStatement),
 			STATEMENT_DRAW_POS_I, STATEMENT_DRAW_POS_J);
@@ -205,7 +208,7 @@ void PrintEffect(int sel, int target)
 
 bool PlayerAction(int sel, Player* player, Enemy** enemyArr, int enemyCnt)
 {
-	if (sel < 1 || sel > 8) return 0;//ì˜ëª»ëœ ì…ë ¥ì´ë¼ë©´ false ë¦¬í„´
+	if (sel < 1 || sel > 8) return 0;//Àß¸øµÈ ÀÔ·ÂÀÌ¶ó¸é false ¸®ÅÏ
 
 	enum PlayerActionEnum  playeractionenum = sel;
 
@@ -214,7 +217,7 @@ bool PlayerAction(int sel, Player* player, Enemy** enemyArr, int enemyCnt)
 	case MELEE:
 		if (!player->CanUseMelee)
 		{
-			sprintf(Statement, "Cannot Use Melee!");
+			sprintf(Statement, "Å¸°İÀ» »ç¿ëÇÒ ¼ö ¾ø´Ù!");
 			return 0;
 		}
 
@@ -228,7 +231,7 @@ bool PlayerAction(int sel, Player* player, Enemy** enemyArr, int enemyCnt)
 		printf("\n>> ");
 		int targetEnemy;
 		scanf("%d", &targetEnemy);
-		//ì˜ëª»ëœ ì…ë ¥ ë¡œì§
+		//Àß¸øµÈ ÀÔ·Â ·ÎÁ÷
 
 		while ((targetEnemy > enemyCnt) || (targetEnemy <= 0) || !enemyArr[targetEnemy - 1]->isAlive)
 		{
@@ -248,39 +251,36 @@ bool PlayerAction(int sel, Player* player, Enemy** enemyArr, int enemyCnt)
 		PlayerMeleeAttack(player, enemyArr[targetEnemy - 1]);
 		PrintEffect(sel, targetEnemy - 1);
 
-		RenewScreen(player, enemyArr, enemyCnt);
 		break;
 	case RANGE:
 		if (!player->CanUseRange)
 		{
-			sprintf(Statement, "Cannot Use Range!");
+			sprintf(Statement, "Àı´ÜÀ» »ç¿ëÇÒ ¼ö ¾ø´Ù!");
 			return 0;
 		}
 		if (PlayerRangeAttack(player, enemyArr, enemyCnt))
 			PrintEffect(sel, 1);
-		RenewScreen(player, enemyArr, enemyCnt);
 		break;
 	case DEFENSE:
 		if (!player->CanUseDefense)
 		{
-			sprintf(Statement, "Cannot Use Defense!");
+			sprintf(Statement, "¼öºñ¸¦ »ç¿ëÇÒ ¼ö ¾ø´Ù!");
 			return 0;
 		}
 		Player_Defense(player);
-		RenewScreen(player, enemyArr, enemyCnt);
 		break;
 	case SKILL:
 		if (!player->CanUseSkill || !player->HasSkill)
 		{
 			if(!player->CanUseSkill)
-				sprintf(Statement, "Cannot Use Skill!");
+				sprintf(Statement, "½ºÅ³À» »ç¿ëÇÒ ¼ö ¾ø´Ù!");
 
 			if(!player->HasSkill)
-				sprintf(Statement, "You Don't have Skill.");
+				sprintf(Statement, "½ºÅ³À» º¸À¯ÇÏ°í ÀÖÁö ¾Ê½À´Ï´Ù");
 			return 0;
 		}
 		
-		//ìŠ¤í‚¬
+		//½ºÅ³
 		break;
 	case PLAYERINFO:
 		DrawMyInfo(player);
@@ -289,7 +289,7 @@ bool PlayerAction(int sel, Player* player, Enemy** enemyArr, int enemyCnt)
 		DrawEnemyArrInfo(enemyArr,enemyCnt);
 		break;
 	case GAMEINFO:
-		//ê²Œì„ ì •ë³´
+		//°ÔÀÓ Á¤º¸
 		break;
 	case QUIT:
 		DrawQuitScreen();
@@ -314,7 +314,7 @@ void PrepareEnemyArr(Enemy** enemyArr, int enemyCnt)
 	srand(time(NULL));
 	for (int i = 0; i < enemyCnt; i++)
 	{
-		//ì•„ì§í•´ê²°ì•ˆë¨
+		//¾ÆÁ÷ÇØ°á¾ÈµÊ
 		if (enemyArr[i]->isAlive)
 		{
 			int seed = rand();
@@ -328,7 +328,7 @@ void PrepareEnemyArr(Enemy** enemyArr, int enemyCnt)
 
 void OnPlayerTurnEnd(Player* player, Enemy** enemyArr, int enemyCnt)
 {
-	//ì  ë°©ì–´ë„ ë‹¤ ì§€ìš°ê¸°
+	//Àû ¹æ¾îµµ ´Ù Áö¿ì±â
 	for (int i = 0; i < enemyCnt; i++)
 	{
 		if (enemyArr[i]->isAlive)
@@ -380,15 +380,15 @@ void RewardStage(Player* player)
 		}
 		SetReward(rewardArr[i]);
 	}
-	//ì¤‘ë³µ ë°©ì§€ ë¡œì§ í•„ìš”
-	//ì„ íƒì§€ ë°°ì—´ ì¶œë ¥
+	//Áßº¹ ¹æÁö ·ÎÁ÷ ÇÊ¿ä
+	//¼±ÅÃÁö ¹è¿­ Ãâ·Â
 	ClearUI();
 	PrintRewardScreen(rewardArr, RewardNum);
 	PrintScreen();
 	
-	//ì„ íƒì§€ ì…ë ¥
+	//¼±ÅÃÁö ÀÔ·Â
 	int Sel;
-	printf("Select reward\n>> ");
+	printf("º¸»óÀ» ¼±ÅÃ\n>> ");
 	scanf("%d", &Sel);
 	Sel--;
 	
@@ -402,15 +402,15 @@ void RewardStage(Player* player)
 
 void OnClearGame(Player* player, Stage** stageArr)
 {
-	//ë™ì í• ë‹¹ í•´ì œ
+	//µ¿ÀûÇÒ´ç ÇØÁ¦
 	DestroyPlayer(player);
 	DestroyStageArr(stageArr);
-	//í´ë¦¬ì–´ í™”ë©´ ì¶œë ¥
+	//Å¬¸®¾î È­¸é Ãâ·Â
 	char clearstr[3][100];
 	char endStr[10] = "End";
-	strcpy(clearstr[0], "A faint light comes out of the enemy's fall");
-	strcpy(clearstr[1], "You started to walk out to there");
-	strcpy(clearstr[2], "No one knows if there's an end to the road");
+	strcpy(clearstr[0], "ÀûÀÌ ¾²·¯Áø °÷¿¡¼­ Èñ¹ÌÇÑ ºûÀÌ »õ¾î³ª¿É´Ï´Ù");
+	strcpy(clearstr[1], "´ç½ÅÀº ±× °÷À» ÇâÇØ °É¾î³ª°©´Ï´Ù");
+	strcpy(clearstr[2], "ÀÌ ±æ¿¡ ³¡ÀÌ ÀÖ´ÂÁö´Â ¾Æ¹«µµ ¸ğ¸¨´Ï´Ù...");
 	for (int i = 0; i < 3; i++)
 	{
 		ClearUI();
@@ -423,7 +423,7 @@ void OnClearGame(Player* player, Stage** stageArr)
 	DrawSentenceCenterAlign(endStr, strlen(endStr), 20, 64);
 	PrintScreen();
 	int temp = _getch();
-	//ê²Œì„ ì¢…ë£Œ
+	//°ÔÀÓ Á¾·á
 	exit(1);
 
 }
@@ -446,7 +446,7 @@ void DrawMyInfo(Player* player)
 	DrawMyInfoUI();
 	DrawPlayerStatus(player);
 	PrintScreen();
-	printf("Press Any Key to return to game\n>>");
+	printf("¾Æ¹« Å°³ª ´­·¯ °ÔÀÓÀ¸·Î µ¹¾Æ°¡±â\n>>");
 	int temp = _getch();
 }
 
@@ -459,7 +459,7 @@ void DrawEnemyArrInfo(Enemy** enemyArr, int enemyCnt)
 			DrawEnemyStatus(enemyArr[i]);
 	}
 	PrintScreen();
-	printf("Press Any Key to return to game\n>>");
+	printf("¾Æ¹« Å°³ª ´­·¯ °ÔÀÓÀ¸·Î µ¹¾Æ°¡±â\n>>");
 	int temp = _getch();
 }
 
@@ -469,6 +469,6 @@ void DrawQuitScreen()
 	ClearUI();
 	DrawSentenceCenterAlign(quitStr, strlen(quitStr), 20, 64);
 	PrintScreen();
-	printf("Press Any Key to quit\n>>");
+	printf("¾Æ¹« Å°³ª ´­·¯ Á¾·á\n>>");
 	int temp = _getch();
 }

@@ -51,10 +51,10 @@ bool PlayerRangeAttack(Player* player, Enemy** enemyArr, int enemyCnt)
 	}
 	else
 	{
-		sprintf(Statement, "Not Enough Energy!");
+		sprintf(Statement, "¿¡³ÊÁö°¡ ºÎÁ·ÇÕ´Ï´Ù!");
 		return 0;
 	}
-	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	
 }
 
 void EnemyAttack(Enemy* enemy, Player* player)
@@ -181,28 +181,28 @@ void EnemyAction(Player* player, Enemy* enemy)
 	{
 	case ENEMYATTACK:
 	{
-		sprintf(Statement, "Enemy %d. %s used Attack!", enemy->EnemyNo + 1, enemy->Name);
+		sprintf(Statement, "Àû %d. %sÀÇ °ø°Ý!", enemy->EnemyNo + 1, enemy->Name);
 		EnemyAttack(enemy, player);
 		break;
 	}
 
 	case ENEMYDEFENSE:
 	{
-		sprintf(Statement, "Enemy %d. %s used Defense!", enemy->EnemyNo + 1, enemy->Name);
+		sprintf(Statement, "Àû%d. %sÀÇ ¼öºñ!", enemy->EnemyNo + 1, enemy->Name);
 		Enemy_Defense(enemy);
 		break;
 	}
 
 	case ENEMYWEAKEN:
 	{
-		sprintf(Statement, "Enemy %d. %s used Weaken", enemy->EnemyNo + 1, enemy->Name);
+		sprintf(Statement, "Àû%d. %sÀÇ ¾àÈ­!", enemy->EnemyNo + 1, enemy->Name);
 		EnemyWeaken(enemy, player);
 		break;
 	}
 
 	case ENEMYCRUSH:
 	{
-		sprintf(Statement, "Enemy %d. %s used Crush!", enemy->EnemyNo + 1, enemy->Name);
+		sprintf(Statement, "Àû %d. %sÀÇ ÆÄ¼â!", enemy->EnemyNo + 1, enemy->Name);
 		EnemyCrush(enemy, player);
 		break;
 	}
